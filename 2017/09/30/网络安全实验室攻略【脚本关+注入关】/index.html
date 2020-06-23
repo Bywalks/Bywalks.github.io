@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Walks个人博客(www.bywalks.com)关注网络安全、信息安全、网站建设、IT行业、网络安全文章、黑客技术、网络安全技术、网络安全知识、互联网安全知识、原创网络安全博客">
+    <meta name="keyword" content="Walks个人博客,关注网络安全,信息安全,网站建设,安全博客,web安全,网站漏洞,网络安全,网络安全技术,网络安全知识,网络安全教程">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          网络安全实验室攻略【脚本关+注入关】 - Walks&#39;s Blog - Walks个人博客|网络安全爱好者
+        
+    </title>
+
+    <link rel="canonical" href="https://www.bywalks.com/2017/09/30/网络安全实验室攻略【脚本关+注入关】/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Walks个人博客</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/About.html">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://www.bywalks.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#网络安全" title="网络安全">网络安全</a>
+                        
+                    </div>
+                    <h1>网络安全实验室攻略【脚本关+注入关】</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Walks on
+                        2017-09-30
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>一：平台地址 <a href="http://hackinglab.cn/" target="_blank" rel="noopener">http://hackinglab.cn/</a> 二：脚本关 1：题目：        key又又找不到了        小明这次哭了，key又找不到了！！！ key啊，你究竟藏到了哪里，为什么我看到的页面上都没有啊！！！！！！ 过关攻略： 点击通关地址，出现下图界面 <img src="http://www.bywalks.com/wp-content/uploads/2017/09/1.png" alt> 点击下，无KEY <img src="http://www.bywalks.com/wp-content/uploads/2017/09/2.png" alt> 发现界面好像有个跳转，所以burpsuite抓包 <img src="http://www.bywalks.com/wp-content/uploads/2017/09/3.png" alt> 果然，location跳转。Key出现   2：题目：  小明要参加一个高技能比赛，要求每个人都要能够快速口算四则运算，2秒钟之内就能够得到结果，但是小明就是一个小学生没有经过特殊的培训，那小明能否通过快速口算测验呢？  过关攻略： 点击通关地址：出现下图   <img src="http://www.bywalks.com/wp-content/uploads/2017/09/4.png" alt> 就是让我们在两秒内计算出来，再次访问的时候数字会变化 口算可以算出来么？显然不可能。那就上脚本吧。 import re   try:     import requests except ImportError:     raise SystemExit(‘\n[!] requests模块导入错误,请执行pip install requests安装!’)   print ‘\n网络信息安全攻防学习平台脚本关第2题\n’ s = requests.Session() url = ‘<a href="http://1.hacklist.sinaapp.com/xss2_0d557e6d2a4ac08b749b61473a075be1/index.php" target="_blank" rel="noopener">http://1.hacklist.sinaapp.com/xss2_0d557e6d2a4ac08b749b61473a075be1/index.php</a>‘ r = s.get(url) res = unicode(r.content, ‘utf-8’).encode(‘gbk’) # print res   num = re.findall(re.compile(r’<br>\s+(.*?)=’), res)[0] print ‘当前获取到需要口算的表达式及计算结果为:\n\n%s=%d\n’ % (num, eval(num))   r = s.post(url, data={‘v’: eval(num)}) print re.findall(re.compile(r’<body>(.*?)</body>‘), r.content)[0]</p>
+<pre><code>3：题目 这个题目是空的 分值: 100Tips:这个题目真不是随便设置的。 什么才是空的呢？ 通关地址：没有，请直接提交答案(小写即可) 过关攻略： 空是什么？空格？%00?null?/\*\*/等等。。逐个测试 4：题目 怎么就是不弹出key呢？分值: 150提交说明：提交前14个字符即可过关 过关攻略： 通关地址 ![](http://www.bywalks.com/wp-content/uploads/2017/09/5.png) 点击后跟字一样。没弹窗。我们看下源代码 ![](http://www.bywalks.com/wp-content/uploads/2017/09/6.png) 看到了么。原来是三个return false 在作怪  直接复制下源代码。本地新建1.html，粘贴进去，然后把三个return false删除即可 5：题目  逗比验证码第一期分值: 100逗比的验证码，有没有难道不一样吗？ 过关攻略： 点击通关地址如图 ![](http://www.bywalks.com/wp-content/uploads/2017/09/7.png) 抓包，pwd标记。intruder模块爆破即可 ![](http://www.bywalks.com/wp-content/uploads/2017/09/8.png) 这题主要是因为验证码验证后没有立即失效。也就是还可以用 6：题目  逗比验证码第二期分值: 150验证便失效的验证码 过关攻略： 还是爆破。图就不发了，基本一样的原理。把验证码删除，然后继续爆破 7：题目  逗比的验证码第三期（SESSION）分值: 150尼玛，验证码怎么可以这样逗比。。 验证码做成这样，你家里人知道吗？ 过关攻略： 方法同第六关。 8：题目  微笑一下就能过关了分值: 150尼玛，碰到这样的题我能笑得出来嘛... 过关攻略： 这题我是没看懂，百度了个答案，如下  
+</code></pre><p>出现了各种绕过。 1.必须有^_^参数 2.参数中不能有. % 3.键名中不能有_(与1矛盾) 4.^_^必须是文件 5.文件不再本地存在</p>
+<p>这题学到了新知识，data协议 data://text/plain;charset:unicode,(●’◡’●) 就可构造出文本 对于3绕过的方法是在URL中_和.等价所以参数为^.^ 得出flag hkjasfhsa*&amp;IUHKUH</p>
+<p>9：题目 逗比的手机验证码分值: 150你的手机号码是13388886666，验证码将会以弹窗的形式给出 过关攻略： 点击通关地址如图 <img src="http://www.bywalks.com/wp-content/uploads/2017/09/10.png" alt> 我们直接66尾号号码获取手机验证，然后用67尾号的手机号码登陆即可 这题考的是一种逻辑漏洞的关系 10：题目  基情燃烧的岁月分值: 150Tips:你是一名黑客，你怀疑你的“（男/女）闺蜜”的出轨了，你要登陆TA手机的网上营业厅查看详单，一探究竟！ 闺蜜手机号码:13388886666 过关攻略： 点击通关地址如图 <img src="http://www.bywalks.com/wp-content/uploads/2017/09/11.png" alt> 三位验证码。直接抓包爆破 <img src="http://www.bywalks.com/wp-content/uploads/2017/09/12.png" alt> 成功爆破。返回内容： 你伤心的发现他/她正在跟你的前男/女友勾搭…..于是下决心看看前任除了跟你的（男/女）闺蜜勾搭，是不是还跟别的勾搭..<br>前任的手机号码是:13399999999  获得前任号码 换个前任号码继续爆破。没爆破出来。卡住了。想了些其他思路，都没成功  看下答案。别人都是爆破前任号码得到的key，你们试试。  11：题目  验证码识别分值: 350验证码识别 Tips:验证码依然是3位数  过关攻略： 这题验证码验证不存在问题，但是我们看服务器返回的验证码。四位数字，那么是不是可以直接识别验证码呢？ 直接上神器 <img src="http://www.bywalks.com/wp-content/uploads/2017/09/9.png" alt> 自己配置下即可。这种四位数字识别率还是挺高的。 附个下载地址给需要的吧。 <a href="http://pan.baidu.com/s/1hrODwsG" target="_blank" rel="noopener">验证码识别</a> 12：题目  XSS基础关分值: 50XSS基础:很容易就可以过关.XSS类题目必须在平台登录才能进行.登录地址请参考左侧&lt;子系统&gt; 过关攻略： 简单的XSS，不多说 <script>alert(xss)</script> 13：题目  XSS基础2:简单绕过分值: 100很容易就可以过关. 过关攻略： 好像是过滤了script 用img的方法 <img src="x" onerror="hackinglab"> 14：题目  XSS基础3:检测与构造分值: 130XSS基础3:检测与构造 Tips:不是很难 过关攻略： 这题花了挺多时间的。发现很多关键字都被过滤。然后没成功。看了下答案，是这样说的</p>
+<p>就是当value的值是敏感值时，后边的载荷不会被过滤</p>
+<p>过关代码：alert’ onmouseover=alert(“success!”)&gt;</p>
+<p>测试成功</p>
+<p>15：题目 Principle很重要的XSS分值: 300原理/原则/理念很重要…..不是所有的xss都叫特仑苏.. ^_^ Take it easy! 有难度。没绕过，就是发现了过滤了：alert–;–’–script–编码–空格等 onload–src–promote  这三个是没有过滤的，标签无法闭合，会被吃掉&gt;。。 有发现的跟我说下吧。 三：注入关: 1：题目 最简单的SQL注入分值: 100Tips题目里有简单提示 过关攻略： 万能密码闭合。不多说 <img src="http://www.bywalks.com/wp-content/uploads/2017/09/13.png" alt> 2：题目  最简单的SQL注入(熟悉注入环境)分值: 100最简单的SQL注入 过关攻略： 闯关地址源码： <img src="http://www.bywalks.com/wp-content/uploads/2017/09/14.png" alt> 参数为id=1，直接加个or 1=1 ，把内容页全部显示出来 <img src="http://www.bywalks.com/wp-content/uploads/2017/09/16.png" alt> 3：题目  防注入分值: 300小明终于知道，原来黑客如此的吊，还有sql注入这种高端技术，因此他开始学习防注入！ 过关攻略： 宽字节注入 判断列 order by 4 判断显示位 union all select 1,2,3,4  查询语句 union all select 1,user(),3,4  用户 database()数据库 version()版本  跑库跑表语句(如果只显示一个被查询的可以加分页语句) -&gt; limit 0,1 union all select 1,table_name,3,4 from information_schema.tables where TABLE_SCHEMA=’walks’ limit 0,1 跑表 union all select 1,column_name,3,4 from information_schema.columns where table_name=’sae_user_sqli3’ limit 1,1 跑列  4：题目  到底能不能回显分值: 350小明经过学习，终于对SQL注入有了理解，她知道原来sql注入的发生根本原因还是数据和语句不能正确分离的原因，导致数据作为sql语句执行；但是是不是只要能够控制sql语句的一部分就能够来利用获取数据呢？小明经过思考知道，where条件可控的情况下，实在是太容易了，但是如果是在limit条件呢？ 过关攻略： <a href="http://lab1.xseclab.com/sqli5\_5ba0bba6a6d1b30b956843f757889552/index.php?start=0&amp;num=1" target="_blank" rel="noopener">http://lab1.xseclab.com/sqli5\_5ba0bba6a6d1b30b956843f757889552/index.php?start=0&amp;num=1</a> 上面的地址有两个参数start和num  分别修改，看看页面的返回值。发现修改start参数之后。在修改的参数后面会出现一个1，也就是num带的值，判断是Limit注入。直接利用analyse爆破的语句 离别歌博客里面说Limit 注入的地址:<a href="https://www.leavesongs.com/PENETRATION/sql-injections-in-mysql-limit-clause.html" target="_blank" rel="noopener">https://www.leavesongs.com/PENETRATION/sql-injections-in-mysql-limit-clause.html</a> 5：题目  邂逅分值: 350小明今天出门看见了一个漂亮的帅哥和漂亮的美女，于是他写到了他的日记本里。 过关攻略： 图片注入。宽字节。真的第一次遇到。。。。醉了都。常规注入语句 6：题目  ErrorBased分值: 150本题目为手工注入学习题目，主要用于练习基于Mysql报错的手工注入。Sqlmap一定能跑出来，所以不必测试了。flag中不带key和# 该题目需要在题目平台登录 过关攻略： 上面已经给了提示ErrorBased   就是基于错误。。也就是报错注入了 报错语句：select * from article where id = 1 and (select 1 from  (select count(*),concat(version(),floor(rand(0)*2))x from  information_schema.tables group by x)a)  version()就是自己可以修改的地方。当然查列和内容的时候表记得修改  7：题目  盲注分值: 200今天我们来学习一下盲注.小明的女朋友现在已经成了女黑阔,而小明还在每个月拿几k的收入,怎么养活女黑阔………..so:不要偷懒哦! 过关攻略： 一般来说我们通过注入获取我们想要得到的数据有三种方式1：基于报错 2：基于内容 3：基于时间。 而在这题上面。有报错但是报错显示出具体内容。想用基于内容的方法也是不行的，返回的内容都是一样的。所以只有基于时间的方法 就是太耗时间了。而且如果因为网络原因也可能会产生错误。   这是我当时报错的图片。 用的是if判断语句来时间延时 and if(substr((select table_name from information_schema.tables where TABLE_SCHEMA=’walks’ limit 0,1),1,1)=’w’,sleep(5),1)  8：题目  SQL注入通用防护分值: 250小明写了一个博客系统,为了防注入,他上网找了一个SQL注入通用防护模块,GET/POST都过滤了哦! 过关攻略： 题目已经说了。通用防注入。GET,POST都过滤，但是他却没有说cookie的方法啊。 所以这题的解题思路就在cookie上面。直接cookie注入即可 9：题目  据说哈希后的密码是不能产生注入的分值: 400  过关攻略：  这题我是没看懂的。直接复制个网上的思路  大家先自己看下页面的源代码 其中最关键的语句是 select * from user where userid=”.intval($_GET[‘userid’]).” and password=’”.md5($_GET[‘pwd’], true) .”‘ 。 对传入的userid使用了intval()函数转化为数字，同时将password使用md5()函数进行转化。这就是一个典型的MD5加密后的SQL注入。  只要提交后变成 SELECT * FROM admin WHERE pass = ‘’or’6<trash>‘就行了。  提供一个字符串：ffifdyop  md5后，276f722736c95d99e921722cf9ed621c  再转成字符串： ‘or’6<trash> 所以构造  我是没成功- -。。。。  好了。终于写完了。。。写着写着突然发现原来这么多，后面就有点敷衍了，不过思路应该都给大家说清楚了。 最后：推荐个自己的个人博客<a href="http://www.bywalks.com。。" target="_blank" rel="noopener">www.bywalks.com。。</a></trash></trash></p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2017/09/30/浅谈SQL注入/" data-toggle="tooltip" data-placement="top" title="浅谈SQL注入">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2017/09/21/2017-9-21 路还很遥远/" data-toggle="tooltip" data-placement="top" title="2017-9-21 路还很遥远">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#网络安全" title="网络安全">网络安全</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="http://www.bugsafe.cn/" target="_blank">Poacher&#39;s Blog</a></li>
+                    
+                        <li><a href="http://www.ttk7.cn/" target="_blank">天堂空气</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "hexo-theme-huxblog";
+    var disqus_identifier = "https://www.bywalks.com/2017/09/30/网络安全实验室攻略【脚本关+注入关】/";
+    var disqus_url = "https://www.bywalks.com/2017/09/30/网络安全实验室攻略【脚本关+注入关】/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Walks个人博客 2020 
+                    <br>
+                    Theme by Hux 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://www.bywalks.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-49627206-1';
+    var _gaDomain = 'bywalks.com';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '4cc1f2d8f3067386cc5cdb626a202900';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://www.bywalks.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

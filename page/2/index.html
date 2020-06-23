@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Walks个人博客(www.bywalks.com)关注网络安全、信息安全、网站建设、IT行业、网络安全文章、黑客技术、网络安全技术、网络安全知识、互联网安全知识、原创网络安全博客">
+    <meta name="keyword" content="Walks个人博客,关注网络安全,信息安全,网站建设,安全博客,web安全,网站漏洞,网络安全,网络安全技术,网络安全知识,网络安全教程">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          Walks&#39;s Blog - Walks个人博客|网络安全爱好者
+        
+    </title>
+
+    <link rel="canonical" href="https://www.bywalks.com/page/2/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Walks个人博客</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/About.html">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<header class="intro-header" style="background-image: url('/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
+                <div class="site-heading">
+                    <h1>Walks个人博客</h1>
+                    <!--<hr class="small">-->
+                    <span class="subheading">To Be A Hacker!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        
+
+<!-- USE SIDEBAR -->
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-1
+                col-md-8 col-md-offset-1
+                col-sm-12
+                col-xs-12
+                post-container
+            ">
+            
+                <!-- Main Content -->
+
+
+<div class="post-preview">
+
+    <a href="/2018/01/04/文件上传漏洞（个人总结）/">
+        <h2 class="post-title">
+            文件上传漏洞（个人总结）
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            前言：
+一次对文件上传漏洞的总结，希望在学习知识的同时可以帮助到其他人。
+目录：
+0x01：前端验证
+0x02：后端验证未严格化
+0x03：解析漏洞
+0x04：如何防护
+前端验证
+前端验证其实没必要多说，就是上传的时候上传文件的类型，后缀都是由前端JS验证的，而我们只要BurpSuite抓一下包就可以绕过客户端的这个验证。  
+后端验证未严格化
+这主要产生在后端验证为黑名单，或者只验证了Co......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Walks on
+        2018-01-04
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2018/01/03/中间件漏洞(不定时更新)/">
+        <h2 class="post-title">
+            中间件漏洞(不定时更新)
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            前言：
+一篇叙述中间件漏洞的文章，总结一下一些中间件的漏洞的利用。
+目录：
+0x01：渗透环境
+0x02：WebLogic
+0x03：Tomcat
+0x04：Jboss
+0x01 渗透环境
+在学习一个漏洞的时候，复现是必须要做的，毕竟看再多文章自己不复现下次遇到了这种漏洞还是不一定会有所印象，所以首先说的就是如何去找一些渗透环境。下面分为几种方法，这里只说下如何搭建Vulhub，其他的可以去......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Walks on
+        2018-01-03
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/12/20/浅谈XXE漏洞/">
+        <h2 class="post-title">
+            浅谈XXE漏洞
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            
+前言：
+遇到个XXE漏洞，查点资料做个笔记。
+在叙述之前说下XML，XML被设计用来传输和存储数据，HTML被设计用来显示数据，XML格式必须严格化。
+目录：
+0x01：漏洞原理
+0x02：攻击代码
+0x03：如何防御
+0x01 漏洞原理
+1：XML可控且后端处理时无过滤（满足这个其实就可以了）  
+2：XML解析是引用外部实体（默认就可以）
+0x02 攻击代码
+服务器端：  
+Get_X......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Walks on
+        2017-12-20
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/12/14/编写自己的XSS接受模块/">
+        <h2 class="post-title">
+            编写自己的XSS接受模块
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            前言：
+看JS书籍中，看着看着就想到了XSS平台，不禁对XSS平台为什么可以接受cookie产生了思考？看了下接受cookie的代码，原来是接受的步骤是这样的。
+我们在存在一个XSS漏洞的地方插入XSS代码，该XSS代码从远程载入一段Javascript。这段Javascript代码的作用就是向我们的XSS平台提交一段GET请求，这段GET请求包括浏览器的cookie（document.co......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Walks on
+        2017-12-14
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/12/02/Tomcat任意文件上传漏洞CVE-2017-12615/">
+        <h2 class="post-title">
+            Tomcat任意文件上传漏洞CVE-2017-12615
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            前言：
+记Tomcat开启PUT后的任意文件上传
+ 影响版本：7.0.0 - 7.0.81  
+ 需要因素：conf/web.xml文件添加readonly参数，属性值为false  
+POC：
+12345678910111213141516171819202122PUT /test.jsp::$DATA HTTP/1.1Host: cm.XXX.comContent-Length: 26&......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Walks on
+        2017-12-02
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/11/29/google-hacking/">
+        <h2 class="post-title">
+            Google Hacking
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            前言：
+Google搜索引擎是十分强大的，就拿自己的网站site:bywalks.com搜索一下，百度只能找到两个页面，而谷歌则除了robot.txt不允许的之外都可以搜索到。
+这篇文章就是Google Hacking的语句。来自于偶然遇到的一个国外博客，觉得挺不错的，所以分享给大家，文后会附上地址的。自己看图，不多说。
+开始：         
+ 
+ 
+ 
+    
+           ......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Walks on
+        2017-11-29
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/11/28/代码审计：XiaoCms 验证码逻辑漏洞/">
+        <h2 class="post-title">
+            代码审计：XiaoCms 验证码逻辑漏洞
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            前言：
+今天在CNVD上面看到了个验证码逻辑漏洞，这种逻辑漏洞遇到过很多次，但一直没有从源代码分析成因，这次正好看看。
+CMS信息：
+产生原因：
+简单看一下检查登陆的代码。首先就判断Code是否正确，如果不正确则直接跳出。后面还有一些对次数的限制。
+
+我们在看下CheckCode.就是拿POST中的code跟后台session中的checkcode对比，看是否相等，这时不管是否相等sessi......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Walks on
+        2017-11-28
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/11/19/代码审计：AppCMS 2.0.101版本本地文件包含/">
+        <h2 class="post-title">
+            代码审计：AppCMS 2.0.101版本本地文件包含
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            前言：
+AppCMS本地文件包含漏洞，可以读取数据库账号密码，然后远程连接。
+产生原因：
+两张图片就可以阐述漏洞的产生原因，首先$tpl,模板函数get获取，无过滤，后面require包含。
+ 利用：载入install/templates/step4的安装步骤，可以读取数据库账号密码。然后3306连接。  
+
+...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Walks on
+        2017-11-19
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/11/15/深入理解宽字节注入/">
+        <h2 class="post-title">
+            深入理解宽字节注入
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            前言：  
+今天看一本PHP书籍的时候，看到里面提到了数据库的字符集，让我想到了宽字节注入，自己好像对此也是一知半解。查了点资料，特此做个笔记。
+产生注入原因：宽字节注入，相信大家都知道是什么东西，利用GBK编码的问题通过%df把\给吃掉，从而使’逃离出来，这里说得是gbk，但并不一定就只 有gbk，只要字符通过转码，就有可能出现这类问题。
+那么gbk转码到底是从哪里来的呢？
+
+我们看下这张......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Walks on
+        2017-11-15
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/11/14/代码审计：phpmywind 5.3存储型XSS/">
+        <h2 class="post-title">
+            代码审计：phpmywind 5.3存储型XSS
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            前言：一个XSS漏洞，挺有趣的，有一个以前都没发现的知识点，所以特此记录下来。
+ 漏洞分析：漏洞点是后台审批留言的时候产生的。  
+我们先看下前台对留言的处理
+
+htmlspecialchars处理，然后存储数据库
+
+后台留言查看时无弹框，点击修改后
+
+弹框出。我们看下代码
+
+这是前台代码。
+
+这是后台代码。我们看下输出，都是直接读取然后输出。那么问题来了，为什么我们在后台修改的时候会弹框呢......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Walks on
+        2017-11-14
+    </p>
+
+</div>
+<hr>
+
+
+
+<!-- Pager -->
+
+<ul class="pager">
+    
+        <li class="previous">
+            <a href="/">&larr; Newer Posts</a>
+        </li>
+    
+    
+        <li class="next">
+            <a href="/page/3/">Older Posts &rarr;</a>
+        </li>
+    
+</ul>
+
+
+
+                <!-- 如果开启评论功能 -->
+                
+
+            </div>
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-3 col-lg-offset-0
+                col-md-3 col-md-offset-0
+                col-sm-12
+                col-xs-12
+                sidebar-container
+            ">
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                            
+                            <a href="/tags/#随笔杂谈" title="随笔杂谈" rel="2">随笔杂谈</a>
+                            
+                        
+                            
+                            <a href="/tags/#关于我" title="关于我" rel="2">关于我</a>
+                            
+                        
+                            
+                            <a href="/tags/#网络安全" title="网络安全" rel="25">网络安全</a>
+                            
+                        
+                            
+                            <a href="/tags/#PYTHON" title="PYTHON" rel="14">PYTHON</a>
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#首页" title="首页" rel="3">首页</a>
+                            
+                        
+                            
+                            <a href="/tags/#代码审计" title="代码审计" rel="7">代码审计</a>
+                            
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Short About -->
+                <section class="visible-md visible-lg">
+                    <hr><h5><a href="/about/">ABOUT ME</a></h5>
+                    <div class="short-about">
+
+                        
+                            <img src="/img/avatar.jpg" />
+                        
+
+                        
+                            <p>勤恳工作、善待他人!</p>
+                        
+
+                        <!-- SNS Link -->
+                        <ul class="list-inline">
+                            
+                            
+                            
+
+                            
+
+                            
+
+                            
+                            
+                            
+                            
+                        </ul>
+                    </div>
+                </section>
+                
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="http://www.bugsafe.cn/" target="_blank">Poacher&#39;s Blog</a></li>
+                    
+                        <li><a href="http://www.ttk7.cn/" target="_blank">天堂空气</a></li>
+                    
+                </ul>
+                
+            </div>
+        
+    </div>
+</div>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Walks个人博客 2020 
+                    <br>
+                    Theme by Hux 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://www.bywalks.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-49627206-1';
+    var _gaDomain = 'bywalks.com';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '4cc1f2d8f3067386cc5cdb626a202900';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://www.bywalks.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

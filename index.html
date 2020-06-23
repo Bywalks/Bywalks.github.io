@@ -90,14 +90,21 @@
 
                         
                         <li>
-                            <a href="/archives/">Archives</a>
+                            <a href="/tags/">Tags</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/tags/">Tags</a>
+                            <a href="/about/About.html">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
                         </li>
                         
                     
@@ -184,21 +191,20 @@
 
 <div class="post-preview">
 
-    <a href="/2020/06/03/hello-world/">
+    <a href="/2020/06/23/341/">
         <h2 class="post-title">
-            Hello World
+            2018-4-21 路还很遥远
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Qu......
+            时间过得很快，转眼间，已经大三即将毕业，马上要踏上安全这个行业相比于整个行业人对这个行业的态度，的确，国内不太重视安全，认为安全是闲有余钱的产物。但我始终认为，行行出状元，当你在一个行业做到顶尖的时候，你的收入也依旧顶尖。最近比较关注于Hackerone，由此关注了国内专注开发，业余安全的一个人博客。别人从开发角度对安全的剖析，让我觉得自己还有很多需要学习。可能接下来博客的跟新不会那么频繁，......
         </div>
     </a>
     <p class="post-meta">
         Posted by Walks on
-        2020-06-03
+        2020-06-23
     </p>
 
 </div>
@@ -206,27 +212,235 @@ Qu......
 
 <div class="post-preview">
 
-    <a href="/2014/01/29/hello-2015/">
+    <a href="/2019/07/22/xss-on-twitter-worth-1120/">
         <h2 class="post-title">
-            Welcome to Hux Blog
+            XSS On Twitter   [Worth 1120$]
         </h2>
         <h3 class="post-subtitle">
-             "Hello World, Hello Blog"
+            
         </h3>
         <div class="post-content-preview">
-            
-“Yeah It’s on. ”
-
-前言Hux 的 Blog 就这么开通了。
-跳过废话，直接看技术实现 
-2015 年，Hux 总算有个地方可以好好写点东西了。
-作为一个程序员， Blog 这种轮子要是挂在大众博客程序上就太没意思了。一是觉得大部分 Blog 服务都太丑，二是觉得不能随便定制不好玩。之前因为太懒没有折腾，结果就一直连个写 Blog 的地儿都没有。
-在玩了一段时间知乎之后，答......
+            有关于我的漏洞赏金计划写的第一篇文章发到了Medium上。有兴趣的可以看看https://medium.com/@bywalks/xss-on-twitter-worth-1120-914dcd28ee18...
         </div>
     </a>
     <p class="post-meta">
-        Posted by Hux on
-        2014-01-29
+        Posted by Walks on
+        2019-07-22
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2018/05/24/2018-5-24 反思和展望/">
+        <h2 class="post-title">
+            2018-5-24 反思和展望
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            最近有点焦虑，写点东西，反思反思，并回望自己这半年来的收获与不足。1：英语方面，前几天的DEFCON China，认识到了英语的不足，学习是一个交流与分享的过程，接触更多学的更多，接下来考个托福或者雅思，年底前完成。2：自动化方面，聪明的人很多，他们懂得利用自己的知识去走捷径，对于一个漏洞挖掘者，自动化工具的确节省了自己很多时间，帮自己漏洞挖的更有效率，For Me:补强自己的Python能......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Walks on
+        2018-05-24
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2018/05/07/postMessage跨域/">
+        <h2 class="post-title">
+            postMessage跨域
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            前言：
+postMessage是HTML5衍生出来的，用来规范跨域的问题。但由于使用者不注意一些安全性，可能会产生一些漏洞，这篇文章介绍可能产生的问题。
+目录：
+0x01：如何工作
+0x02：可能的三个漏洞
+0x03：正确代码
+如何工作
+为了跨域去发送一些数据，应用会用如下的语句去发送  
+12targetWindow.postMessage(data, "\*");data为数据，"\*"......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Walks on
+        2018-05-07
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2018/04/10/浅谈OAuth2.0协议安全性/">
+        <h2 class="post-title">
+            浅谈OAuth2.0协议安全性
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            前言：  
+老洞新谈，重复造属于自己的轮子。  
+目录：
+0x01：什么是OAuth2.0协议
+0x02：配置不当所造成的危害
+0x03：如何正确配置
+什么是OAuth2.0协议  
+ 在OAuth协议还没有产生之前，如果我们想要登录一个网站，而这个网站又支持第三方登录，例如QQ登录。那么我们就只能在这个网站上输入QQ账号和密码，这个网站同时也就知道了我们的账号和密码，这势必会产生一些安全问......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Walks on
+        2018-04-10
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2018/03/28/host-header-injection/">
+        <h2 class="post-title">
+            Host-Header-Injection
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            前言：
+遇到个Host-header-injection，简单的查查资料，总结一下这方面的知识。
+目录：
+0x01：漏洞原理
+0x02：黑盒测试
+0x03：漏洞危害
+0x04：如何修复
+漏洞原理
+在互联网上，大部分情况下一个web服务器，有着一个IP和多个网站。那么当我们向web服务器做出请求时，web服务器是如何识别到底是访问其中的哪个网站呢？这就是HOST存在的理由。  
+
+而当服务器获......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Walks on
+        2018-03-28
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2018/03/20/ClickJacking简介和防御/">
+        <h2 class="post-title">
+            ClickJacking简介和防御
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            前言：
+最近看到一篇关于Clickjacking的某些浏览器不支持特性而产生的漏洞，故查查资料，记录下这些。
+重点在于Clickjacking的三种防御手段、
+目录：
+0x01：什么是点击劫持（ClickJacking）
+0x02：如何防御
+什么是点击劫持（Clickjacking）
+一种视觉欺骗手段，通过frame框架包含目标网站。诱使受害者点击页面，造成一些敏感操作，例如转账，泄露个人信......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Walks on
+        2018-03-20
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2018/03/08/浅谈CORS可能产生的漏洞/">
+        <h2 class="post-title">
+            浅谈CORS可能产生的漏洞
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            前言：
+转眼两个月过去了，博客一直都没有更新。重新捡起自己的博客，在写写自己的学习过程。
+这次要说的是由于CORS配置不当而引起的跨域问题。CORS，翻译过来就是“跨域资源共享”，这里的重点在于跨域，要知道在网络安全里面，同源策略是一个很重要的东西。而这个跨域就打破了这个特性，从而可能会造成一些问题。但其实CORS本意是用来避免这些安全问题的。
+这里就不重复说一些原理类的问题了。毕竟百度上面......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Walks on
+        2018-03-08
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2018/01/18/浅谈X-Forwarded-For伪造/">
+        <h2 class="post-title">
+            浅谈X-Forwarded-For伪造
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            前言：
+什么是X-Forwarded-For伪造?
+就是服务器获取访问IP时未做严格限制，导致访问IP是可以伪造的。
+目录：
+0x01：漏洞成因
+0x02：漏洞危害
+0x03：如何修复
+漏洞成因
+在这，我复制一段网上的php代码来说的更清楚一点。以下都是依据此代码。  
+1234567891011121314&lt;?phpfunction getIP() &#123; 	if (isset......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Walks on
+        2018-01-18
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2018/01/09/DNSLOG在渗透中的妙用/">
+        <h2 class="post-title">
+            DNSLOG在渗透中的妙用
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            前言：
+DNSLOG可能有些人对这个有点陌生，但这真是个十分强大的渗透技巧，这篇文章就是叙述DNSLOG在渗透中的强大之处，相信对这个了解不多的看了之后会觉得受益良多。
+首先先简单的介绍一下DNSLOG，抽象的语言就不多说，用我自己的思路就是当我们拥有一个二级域名，例如bywalks.com，然后请求三级域名，例如dnstest.bywalks.com，DNS解析时，
+会把访问三级域名的日记......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Walks on
+        2018-01-09
     </p>
 
 </div>
@@ -238,6 +452,10 @@ Qu......
 
 <ul class="pager">
     
+    
+        <li class="next">
+            <a href="/page/2/">Older Posts &rarr;</a>
+        </li>
     
 </ul>
 
@@ -262,6 +480,30 @@ Qu......
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                         
+                            
+                            <a href="/tags/#随笔杂谈" title="随笔杂谈" rel="2">随笔杂谈</a>
+                            
+                        
+                            
+                            <a href="/tags/#关于我" title="关于我" rel="2">关于我</a>
+                            
+                        
+                            
+                            <a href="/tags/#网络安全" title="网络安全" rel="25">网络安全</a>
+                            
+                        
+                            
+                            <a href="/tags/#PYTHON" title="PYTHON" rel="14">PYTHON</a>
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#首页" title="首页" rel="3">首页</a>
+                            
+                        
+                            
+                            <a href="/tags/#代码审计" title="代码审计" rel="7">代码审计</a>
                             
                         
                     </div>
@@ -306,17 +548,9 @@ Qu......
                 <ul class="list-inline">
 
                     
-                        <li><a href="天堂空气" target="_blank">Poacher&#39;s Blog</a></li>
+                        <li><a href="http://www.bugsafe.cn/" target="_blank">Poacher&#39;s Blog</a></li>
                     
-                        <li><a href="http://www.ttk7.cn/" target="_blank">Hux Blog</a></li>
-                    
-                        <li><a href="#" target="_blank">Foo</a></li>
-                    
-                        <li><a href="#" target="_blank">Bar</a></li>
-                    
-                        <li><a href="#" target="_blank">Example Friends</a></li>
-                    
-                        <li><a href="#" target="_blank">It helps SEO</a></li>
+                        <li><a href="http://www.ttk7.cn/" target="_blank">天堂空气</a></li>
                     
                 </ul>
                 
