@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Bywalks">
+
+
+
+    <meta name="description" content="Bywalks个人博客(www.bywalks.com)关注网络安全、信息安全、网站建设、IT行业、网络安全文章、黑客技术、网络安全技术、网络安全知识、互联网安全知识、原创网络安全博客">
+
+
+    <meta name="keywords" content="Bywalks个人博客,关注网络安全,信息安全,网站建设,安全博客,web安全,网站漏洞,网络安全,网络安全技术,网络安全知识,网络安全教程">
+
+
+<title>XSS On Twitter   [Worth 1120$] | Bywalks&#39;s Blog - Bywalks个人博客|网络安全爱好者</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Bywalks&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Bywalks&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">XSS On Twitter   [Worth 1120$]</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Bywalks</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">July 22, 2019&nbsp;&nbsp;0:00:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>Hi guys, this is the first writeup about my vulnerability bounty program,a process about how I discovered a Twitter XSS vulnerability.</strong></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>I think that in the process of finding the vulnerability, there are some interesting knowledge points, I hope you can get some from my writeup.</strong></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>If you want to know more details, you need to visit <a target="_blank" rel="noopener" href="https://blog.blackfan.ru/2017/09/devtwittercom-xss.html">bobrov’s blog</a>, my discovery is due to reading his writeup, and thanks bobrov very much,I have a lot of gains from his blog.</strong></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>Maybe you don’t want to spend more time. Here I will give a brief explanation of his article. When you visit some addresses, the server returns 302, which is similar to the following picture.</strong></span></p>
+<p><img src="/2019/07/22/xss-on-twitter-worth-1120/1.png"></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>In the returned Body, location will choose how to populate according to the requested URL,and the requested URI will be placed in the href event.</strong></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>What do you think of next? Can we try it with <code>dev.twiiter.com//javascript:alert(‘1’);/</code></strong></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>indeed, as you might expect, <code>&lt;a href=”javascript:alert(‘1’);/”&gt; Xxx&lt;/a&gt;</code> will be in the return body,but the returned location is <code>location:javascript:alert(‘1’);/</code> ,The browser does not play the box</strong></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>So, bobrov did a lot of fuzz, trying to get around the limitations here, amazing, he did, his Fuzz process is as follows (taken from his blog)</strong></span></p>
+<p><img src="/2019/07/22/xss-on-twitter-worth-1120/2.png"></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>So, his final Payload is</strong></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong><code>https://dev.twitter.com//x:1/:///%01javascript:alert(document.cookie)</code></strong></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>and the response from the server is as follows.Location header &#x3D; <code>//aa :1/:/dev.twitter.com/%01xxx .</code> returned body &#x3D; <code>&lt;a Href=”javascript:alert(document.cookie)”&gt;xxx&lt;/a&gt;</code>.</strong></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>Seeing this, you may be wondering, is this a problem?Javascript only works when the a tag is clicked,and the location header is <code>http:////aa:1/:/dev.twitter.com/%01xxx</code>,does the browser not jump?</strong></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>There is a key point in this.When you visit a website, usually, the port you access is 80 or 8080,if you enter the port address as 1, the browser will not jump.Here, it is the a tag. The click was made possible, so we can combine the issue via Clickjacking,let the victim trigger this XSS vulnerability</strong></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>After introducing his findings, let me talk about how I found this problem again.Honestly, I have been paying attention to Twitter security for a while,but I have gained very little,so I put my eye on Twitter’s past vulnerability report to see if there are some problems in the Twitter fix.</strong></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>When I saw bobrov writeup about the problem,I immediately visited dev.twtter.com to try to find out if there were some problems.When I collected information through Google, I found an extremely interesting link.</strong></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong><code>https://dev.twitter.com/web/sign-inhttps://dev.twitter.com/basics/adding-international-support-to-your-apps</code></strong></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>Look closely, do you find it interesting? My feeling tells me that there may be problems here.So I tried to go to Fuzz to confirm my guess.After a period of testing, I found that when I added a &#x2F; at the end of the URL,a miracle happened, for example,</strong></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>when I visited <code>https://dev.twitter.com/web/sign-inhttps://dev.twitter.com/http://www.bywalks.com/,</code></strong></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>location&#x3D;<code>http://www.bywalks.com,href=http://www.bywalks.com</code></strong></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>Yes,Twitter’s fix for this issue no longer exists. Finally,after a period of Fuzz, my final Payload was <code>https://dev.twitter.com//web%2f:1/:///%01javascript:alert(1)/</code> and I got <code>Twitter 1120$ rewards</code></strong></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>My gains in the process:</strong></span></p>
+<ul>
+<li><p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>Don’t give up on the exploitation of a large company’s loopholes, insist that there will always be gains</strong></span></p>
+</li>
+<li><p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>When accessing a 302 jump page, location header and link on page extracting Url in different ways, there may be problems here.</strong></span></p>
+</li>
+<li><p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>When the browser tries to access a website with a port of 1, it will not jump</strong></span></p>
+</li>
+</ul>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>I hope that you can make some gains from my writing and sorry I m a non English speaker</strong></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>best wishes,</strong><br><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>Bywalks</strong></span></span></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Bywalks</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2019/07/22/xss-on-twitter-worth-1120/">http://example.com/2019/07/22/xss-on-twitter-worth-1120/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"># 网络安全</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/08/06/%E7%BD%91%E7%AB%99%E8%BF%81%E7%A7%BB%E3%80%90%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA-vps%E3%80%91/">网站迁移【虚拟主机 -> VPS】</a>
+            
+            
+            <a class="next" rel="next" href="/2018/05/24/2018-5-24-%E5%8F%8D%E6%80%9D%E5%92%8C%E5%B1%95%E6%9C%9B/">2018-5-24 反思和展望</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Bywalks | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

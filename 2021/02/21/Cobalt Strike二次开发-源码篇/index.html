@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Bywalks">
+
+
+
+    <meta name="description" content="Bywalks个人博客(www.bywalks.com)关注网络安全、信息安全、网站建设、IT行业、网络安全文章、黑客技术、网络安全技术、网络安全知识、互联网安全知识、原创网络安全博客">
+
+
+    <meta name="keywords" content="Bywalks个人博客,关注网络安全,信息安全,网站建设,安全博客,web安全,网站漏洞,网络安全,网络安全技术,网络安全知识,网络安全教程">
+
+
+<title>Cobalt Strike二次开发-源码篇 | Bywalks&#39;s Blog - Bywalks个人博客|网络安全爱好者</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Bywalks&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Bywalks&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Cobalt Strike二次开发-源码篇</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Bywalks</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">February 21, 2021&nbsp;&nbsp;0:00:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><span style="color: #008000;">前言</span></h2><p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">Record CS二次开发，整理一下自己的思考，系列文章的第二篇，源码篇，众所周知，CS功能十分强大，强大在于它不止内置渗透工具，还可以加载其他程序在受害者主机去运行，调用程序的形式为.NET、Powershell、DLL、BOF、这里选取.NET再加上现在非常火的免杀做本篇文章内容，故文章内容为UI调用.NET、二开免杀。</span></font></p>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a><span style="color: #008000;">目录</span></h2><p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">0x00UI调用.NET<br><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">0x01二开免杀</span></font></span></font></p>
+<h2 id="0x00UI调用-NET"><a href="#0x00UI调用-NET" class="headerlink" title="0x00UI调用.NET"></a><span style="color: #008000;">0x00UI调用.NET</span></h2><p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">CS中调用.NET的程序命令为Execute-Assembly，execute-assembly 命令将一个本地的.NET可执行文件作为Beacon的后渗透任务来运行。简单点来说<strong>就是C端（client）调用.NET程序，在受控端执行</strong>。那么二开这个功能的益处在哪呢？我们能把一些常用的.NET程序，加入到CS源码中，做程序自有功能，那么在渗透过程中，就可以通过UI或者命令行的形式去直接调用该.NET程序，想想CS和MSF，CS更火的原因大概就是因为UI的存在。</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">源码反编译在上一篇已经有了相应的讲解，那么有了源码，我们就需要对源码做相应分析，分析哪些源码是用来调用.NET的，搜索execute-assembly去查看源码逻辑。<br><img src="/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/1.jpg"></span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">经过分析后，原CS程序调用.NET的源码流程图如下图右侧，下图左侧为二开CS，添加UI调用.NET的代码逻辑<br><img src="/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/2.jpg"></span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">首先说说原CS自带调用.NET的形式Beacon Console，Beacon Console即为Beacon控制台下输入命令的形式，输入点如下图<br><img src="/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/3.jpg"></span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">在Beacon Console输入help查看一下execute-assembly所需参数<br><img src="/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/4.jpg"></span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">由上图可看出，执行.NET程序需要execute-assembly，后带file路径+args，那么在查看源码逻辑时，就需要重点关注这三个输入</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">在流程图中右侧可看出，Beacon Console箭头下为BeaconConsole.java，即输入命令后，源码逻辑会进入BeaconConsole.java，通过匹配输入字符去进入不同的代码段，假设输入内容为execute-assembly，那么进入的代码段则为下图内容<br><img src="/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/5.jpg"></span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">具体代码如下，可看到控制台输入字符匹配execute-assembly则会执行ExecuteAssembly函数</span></font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">else if (var3.is(&quot;execute-assembly&quot;)) &#123;</span><br><span class="line">if (var3.verify(&quot;pZ&quot;)) &#123;</span><br><span class="line">     //var4 = args</span><br><span class="line">     var4 = var3.popString();</span><br><span class="line">     //var10 = file路径</span><br><span class="line">     var10 = var3.popString();</span><br><span class="line">     this.master.ExecuteAssembly(var10, var4);</span><br><span class="line">     &#125; else if (var3.isMissingArguments() &amp;&amp; var3.verify(&quot;F&quot;)) &#123;</span><br><span class="line">     var4 = var3.popString();</span><br><span class="line">     this.master.ExecuteAssembly(var4, &quot;&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">追踪ExecuteAssembly函数，则进入TaskBeacon.java<br><img src="/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/6.jpg"></span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">对代码做简单讲解，做了两个判断，两个判断都满足的情况下，执行ExecuteAssemblyJob对象的spawn函数</span></font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public void ExecuteAssembly(String var1, String var2) &#123;</span><br><span class="line">     //判断载入程序是否为.NET程序</span><br><span class="line">     PEParser var3 = PEParser.load(CommonUtils.readFile(var1));</span><br><span class="line">     if (!var3.isProcessAssembly()) &#123;</span><br><span class="line">          //不是的情况下，直接控制台输出错误提示</span><br><span class="line">          this.error(&quot;File &quot; + var1 + &quot; is not a process assembly (.NET EXE)&quot;);</span><br><span class="line">     &#125; else &#123;</span><br><span class="line">          //是的话执行如下代码</span><br><span class="line">          for(int var4 = 0; var4 &lt; this.bids.length; ++var4) &#123;</span><br><span class="line">          BeaconEntry var5 = DataUtils.getBeacon(this.data, this.bids[var4]);</span><br><span class="line">          //判断.NET是否为64位</span><br><span class="line">          if (var5.is64()) &#123;</span><br><span class="line">               //var1跟var2分别是之前传递进来的file和args</span><br><span class="line">               (new ExecuteAssemblyJob(this, var1, var2, &quot;x64&quot;)).spawn(this.bids[var4]);</span><br><span class="line">          &#125; else &#123;</span><br><span class="line">               (new ExecuteAssemblyJob(this, var1, var2, &quot;x86&quot;)).spawn(this.bids[var4]);</span><br><span class="line">          &#125;</span><br><span class="line">     &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">追踪ExecuteAssemblyJob对象的spawn函数，发现spawn函数在ExecuteAssemblyJob继承的JobSimple内<br><img src="/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/7.jpg"></span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">从控制台输入到加载执行，整个代码逻辑大致如上，想一想该如何二开该功能，用UI调用.NET呢，首先需要有个UI到功能的枢纽，可通过对话框的形式，这个对话框里面可以有个按钮，按钮直接执行.NET程序，也可以通过输入框，输入对应的.NET程序路径和args，然后点击确定执行</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">有了思路，那么试着去做，再看一下这张图<br><img src="/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/8.jpg"></span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">UI下面的第一个箭头是default.cna，default.cna存放的为sleep脚本代码，通过sleep脚本语言去设计按钮UI，简单说下sleep，底层为Java所写，语言形式跟Go相似，这个内容就不详细叙说，在后一篇文章也会做相应讲解，通俗来说，<strong>CS中的default.cna就是按钮UI设计</strong>，查看default.cna源码，可看出代码对应匹配UI<br><img src="/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/9.jpg"></span></font></p>
+<p><img src="/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/10.jpg"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">menu &quot;&amp;custom&quot; &#123;</span><br><span class="line">        item &quot;&amp;custom&quot; &#123;</span><br><span class="line">            customDialog($1);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">以新加的custom按钮举例，前为UI按钮，后为代码实现，即点击custom -&gt; custom按钮后，会去AggressorBrige.java去查找customDialog，AggressorBridge.java其为枢纽，该段代码为自己二开时添加<br><img src="/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/11.jpg"></span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">同时需要在AggressorBridge.java中添加的还有如下两行代码</span></font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import MyCustomDialogs.customDialog;</span><br><span class="line">Cortana.put(var1, &quot;&amp;customDialog&quot;, this);</span><br></pre></td></tr></table></figure>
+
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">匹配customDialog后，调用customDialog对象的show1函数，显示写的Dialog<br><img src="/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/12.jpg"></span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">点击DotNet则会执行TaskBeacon对象的ExecuteDotNet函数<br><img src="/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/13.jpg"></span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">ExecuteDotNet函数如下图，为把TaskBeacon中的ExecuteAssembly函数拿来复用的函数，改了文件名，做了var1，也就是file路径的修改<br><img src="/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/14.jpg"></span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">file路径直接从源码包里面获取<br><img src="/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/15.jpg"></span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">上图中的ExecuteDotNetAssemblyJob对象Copy自ExecuteAssemblyJob对象，改了对象名</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">这样，UI调用.NET即修改成功，看看成果，test.exe为打印Process，回显成功<br><img src="/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/16.jpg"></span></font></p>
+<h2 id="0x01二开免杀"><a href="#0x01二开免杀" class="headerlink" title="0x01二开免杀"></a><span style="color: #008000;">0x01二开免杀</span></h2><p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">这里需要对CS生成的木马做一个相应的介绍，CS生成的其实本质上都是shellcode，所以对CS生成的木马做免杀，等同于shellcode免杀，或者也可以在加载器上面做改变</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">以Payload Generator生成shellcode做例<br><img src="/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/17.jpg"></span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">我们需要找到生成shellcode的代码处<br><img src="/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/18.jpg"></span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">追踪进行，查看代码逻辑，该代码段为生成.c文件，文件内容为shellcode<br><img src="/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/19.jpg"></span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">参考一下TideSec写的免杀文章<br><img src="/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/20.jpg"></span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">把如下代码放入ToC函数，当然也可以自己对shellcode做混淆<br><img src="/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/21.jpg"></span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">生成.c文件后，VS生成exe，免杀效果如下，免杀前后分别为16-6<br><img src="/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/22.jpg"></span></font></p>
+<p><img src="/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/23.jpg"></p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a><span style="color: #008000;">参考文章</span></h2><p><font size="4"><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1yz411i71Z?p=8">https://www.bilibili.com/video/BV1yz411i71Z?p=8</a><br><font size="4"><a target="_blank" rel="noopener" href="https://github.com/TideSec/BypassAntiVirus">https://github.com/TideSec/BypassAntiVirus</a><br><font size="4"><a target="_blank" rel="noopener" href="https://www.freebuf.com/company-information/242596.html">https://www.freebuf.com/company-information/242596.html</a></font></font></font></p>
+<p><font size="4"><div class="text" style="text-align:center;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">▼更多精彩推荐，请关注▼</span></div><br><img src="/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/24.jpg"></font></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Bywalks</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/">http://example.com/2021/02/21/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E6%BA%90%E7%A0%81%E7%AF%87/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"># 网络安全</a>
+                    
+                        <a href="/tags/CS%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/"># CS二次开发</a>
+                    
+                        <a href="/tags/%E7%BA%A2%E9%98%9F%E6%8A%80%E8%83%BD/"># 红队技能</a>
+                    
+                        <a href="/tags/%E5%85%8D%E6%9D%80/"># 免杀</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2021/03/27/HW%E9%98%B2%E5%AE%88%E6%BA%AF%E6%BA%90%E5%B7%A5%E5%85%B7TrackAttacker/">HW防守溯源工具TrackAttacker</a>
+            
+            
+            <a class="next" rel="next" href="/2021/02/19/Cobalt%20Strike%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91-%E7%8E%AF%E5%A2%83%E7%AF%87/">Cobalt Strike二次开发-环境篇</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Bywalks | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
