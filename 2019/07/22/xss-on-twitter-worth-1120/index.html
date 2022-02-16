@@ -161,38 +161,38 @@
 
         <div class="post-content">
             <p><span style="font-family: Times New Roma';"><strong>Hi guys, this is the first writeup about my vulnerability bounty program,a process about how I discovered a Twitter XSS vulnerability.</strong></span></p>
-<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>I think that in the process of finding the vulnerability, there are some interesting knowledge points, I hope you can get some from my writeup.</strong></span></p>
-<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>If you want to know more details, you need to visit <a target="_blank" rel="noopener" href="https://blog.blackfan.ru/2017/09/devtwittercom-xss.html">bobrov’s blog</a>, my discovery is due to reading his writeup, and thanks bobrov very much,I have a lot of gains from his blog.</strong></span></p>
-<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>Maybe you don’t want to spend more time. Here I will give a brief explanation of his article. When you visit some addresses, the server returns 302, which is similar to the following picture.</strong></span></p>
+<p><span style="font-family: Times New Roma';"><strong>I think that in the process of finding the vulnerability, there are some interesting knowledge points, I hope you can get some from my writeup.</strong></span></p>
+<p><span style="font-family: Times New Roma';"><strong>If you want to know more details, you need to visit <a target="_blank" rel="noopener" href="https://blog.blackfan.ru/2017/09/devtwittercom-xss.html">bobrov blog</a>, my discovery is due to reading his writeup, and thanks bobrov very much,I have a lot of gains from his blog.</strong></span></p>
+<p><span style="font-family: Times New Roma';"><strong>Maybe you don’t want to spend more time. Here I will give a brief explanation of his article. When you visit some addresses, the server returns 302, which is similar to the following picture.</strong></span></p>
 <p><img src="/2019/07/22/xss-on-twitter-worth-1120/1.png"></p>
-<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>In the returned Body, location will choose how to populate according to the requested URL,and the requested URI will be placed in the href event.</strong></span></p>
-<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>What do you think of next? Can we try it with <code>dev.twiiter.com//javascript:alert(‘1’);/</code></strong></span></p>
-<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>indeed, as you might expect, <code>&lt;a href=”javascript:alert(‘1’);/”&gt; Xxx&lt;/a&gt;</code> will be in the return body,but the returned location is <code>location:javascript:alert(‘1’);/</code> ,The browser does not play the box</strong></span></p>
-<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>So, bobrov did a lot of fuzz, trying to get around the limitations here, amazing, he did, his Fuzz process is as follows (taken from his blog)</strong></span></p>
+<p><span style="font-family: Times New Roma';"><strong>In the returned Body, location will choose how to populate according to the requested URL,and the requested URI will be placed in the href event.</strong></span></p>
+<p><span style="font-family: Times New Roma';"><strong>What do you think of next? Can we try it with <code>dev.twiiter.com//javascript:alert(‘1’);/</code></strong></span></p>
+<p><span style="font-family: Times New Roma';"><strong>indeed, as you might expect, <code>&lt;a href=”javascript:alert(‘1’);/”&gt; Xxx&lt;/a&gt;</code> will be in the return body,but the returned location is <code>location:javascript:alert(‘1’);/</code> ,The browser does not play the box</strong></span></p>
+<p><span style="font-family: Times New Roma';"><strong>So, bobrov did a lot of fuzz, trying to get around the limitations here, amazing, he did, his Fuzz process is as follows (taken from his blog)</strong></span></p>
 <p><img src="/2019/07/22/xss-on-twitter-worth-1120/2.png"></p>
-<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>So, his final Payload is</strong></span></p>
-<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong><code>https://dev.twitter.com//x:1/:///%01javascript:alert(document.cookie)</code></strong></span></p>
-<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>and the response from the server is as follows.Location header &#x3D; <code>//aa :1/:/dev.twitter.com/%01xxx .</code> returned body &#x3D; <code>&lt;a Href=”javascript:alert(document.cookie)”&gt;xxx&lt;/a&gt;</code>.</strong></span></p>
-<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>Seeing this, you may be wondering, is this a problem?Javascript only works when the a tag is clicked,and the location header is <code>http:////aa:1/:/dev.twitter.com/%01xxx</code>,does the browser not jump?</strong></span></p>
-<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>There is a key point in this.When you visit a website, usually, the port you access is 80 or 8080,if you enter the port address as 1, the browser will not jump.Here, it is the a tag. The click was made possible, so we can combine the issue via Clickjacking,let the victim trigger this XSS vulnerability</strong></span></p>
-<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>After introducing his findings, let me talk about how I found this problem again.Honestly, I have been paying attention to Twitter security for a while,but I have gained very little,so I put my eye on Twitter’s past vulnerability report to see if there are some problems in the Twitter fix.</strong></span></p>
-<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>When I saw bobrov writeup about the problem,I immediately visited dev.twtter.com to try to find out if there were some problems.When I collected information through Google, I found an extremely interesting link.</strong></span></p>
-<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong><code>https://dev.twitter.com/web/sign-inhttps://dev.twitter.com/basics/adding-international-support-to-your-apps</code></strong></span></p>
-<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>Look closely, do you find it interesting? My feeling tells me that there may be problems here.So I tried to go to Fuzz to confirm my guess.After a period of testing, I found that when I added a &#x2F; at the end of the URL,a miracle happened, for example,</strong></span></p>
-<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>when I visited <code>https://dev.twitter.com/web/sign-inhttps://dev.twitter.com/http://www.bywalks.com/,</code></strong></span></p>
-<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>location&#x3D;<code>http://www.bywalks.com,href=http://www.bywalks.com</code></strong></span></p>
-<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>Yes,Twitter’s fix for this issue no longer exists. Finally,after a period of Fuzz, my final Payload was <code>https://dev.twitter.com//web%2f:1/:///%01javascript:alert(1)/</code> and I got <code>Twitter 1120$ rewards</code></strong></span></p>
-<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>My gains in the process:</strong></span></p>
+<p><span style="font-family: Times New Roma';"><strong>So, his final Payload is</strong></span></p>
+<p><span style="font-family: Times New Roma';"><strong><code>https://dev.twitter.com//x:1/:///%01javascript:alert(document.cookie)</code></strong></span></p>
+<p><span style="font-family: Times New Roma';"><strong>and the response from the server is as follows.Location header &#x3D; <code>//aa :1/:/dev.twitter.com/%01xxx .</code> returned body &#x3D; <code>&lt;a Href=”javascript:alert(document.cookie)”&gt;xxx&lt;/a&gt;</code>.</strong></span></p>
+<p><span style="font-family: Times New Roma';"><strong>Seeing this, you may be wondering, is this a problem?Javascript only works when the a tag is clicked,and the location header is <code>http:////aa:1/:/dev.twitter.com/%01xxx</code>,does the browser not jump?</strong></span></p>
+<p><span style="font-family: Times New Roma';"><strong>There is a key point in this.When you visit a website, usually, the port you access is 80 or 8080,if you enter the port address as 1, the browser will not jump.Here, it is the a tag. The click was made possible, so we can combine the issue via Clickjacking,let the victim trigger this XSS vulnerability</strong></span></p>
+<p><span style="font-family: Times New Roma';"><strong>After introducing his findings, let me talk about how I found this problem again.Honestly, I have been paying attention to Twitter security for a while,but I have gained very little,so I put my eye on Twitter’s past vulnerability report to see if there are some problems in the Twitter fix.</strong></span></p>
+<p><span style="font-family: Times New Roma';"><strong>When I saw bobrov writeup about the problem,I immediately visited dev.twtter.com to try to find out if there were some problems.When I collected information through Google, I found an extremely interesting link.</strong></span></p>
+<p><span style="font-family: Times New Roma';"><strong><code>https://dev.twitter.com/web/sign-inhttps://dev.twitter.com/basics/adding-international-support-to-your-apps</code></strong></span></p>
+<p><span style="font-family: Times New Roma';"><strong>Look closely, do you find it interesting? My feeling tells me that there may be problems here.So I tried to go to Fuzz to confirm my guess.After a period of testing, I found that when I added a &#x2F; at the end of the URL,a miracle happened, for example,</strong></span></p>
+<p><span style="font-family: Times New Roma';"><strong>when I visited <code>https://dev.twitter.com/web/sign-inhttps://dev.twitter.com/http://www.bywalks.com/,</code></strong></span></p>
+<p><span style="font-family: Times New Roma';"><strong>location&#x3D;<code>http://www.bywalks.com,href=http://www.bywalks.com</code></strong></span></p>
+<p><span style="font-family: Times New Roma';"><strong>Yes,Twitter’s fix for this issue no longer exists. Finally,after a period of Fuzz, my final Payload was <code>https://dev.twitter.com//web%2f:1/:///%01javascript:alert(1)/</code> and I got <code>Twitter 1120$ rewards</code></strong></span></p>
+<p><span style="font-family: Times New Roma';"><strong>My gains in the process:</strong></span></p>
 <ul>
-<li><p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>Don’t give up on the exploitation of a large company’s loopholes, insist that there will always be gains</strong></span></p>
+<li><p><span style="font-family: Times New Roma';"><strong>Don’t give up on the exploitation of a large company’s loopholes, insist that there will always be gains</strong></span></p>
 </li>
-<li><p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>When accessing a 302 jump page, location header and link on page extracting Url in different ways, there may be problems here.</strong></span></p>
+<li><p><span style="font-family: Times New Roma';"><strong>When accessing a 302 jump page, location header and link on page extracting Url in different ways, there may be problems here.</strong></span></p>
 </li>
-<li><p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>When the browser tries to access a website with a port of 1, it will not jump</strong></span></p>
+<li><p><span style="font-family: Times New Roma';"><strong>When the browser tries to access a website with a port of 1, it will not jump</strong></span></p>
 </li>
 </ul>
-<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>I hope that you can make some gains from my writing and sorry I m a non English speaker</strong></span></p>
-<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>best wishes,</strong><br><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>Bywalks</strong></span></span></p>
+<p><span style="font-family: Times New Roma';"><strong>I hope that you can make some gains from my writing and sorry I m a non English speaker</strong></span></p>
+<p><span style="font-family: Times New Roma';"><strong>best wishes,</strong><br><span style="font-family: Times New Roma';"><strong>Bywalks</strong></span></span></p>
 
         </div>
 
