@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Bywalks">
+
+
+
+    <meta name="description" content="Bywalks个人博客(www.bywalks.com)关注网络安全、信息安全、网站建设、IT行业、网络安全文章、黑客技术、网络安全技术、网络安全知识、互联网安全知识、原创网络安全博客">
+
+
+    <meta name="keywords" content="Bywalks个人博客,关注网络安全,信息安全,网站建设,安全博客,web安全,网站漏洞,网络安全,网络安全技术,网络安全知识,网络安全教程">
+
+
+<title>还在路上 | Bywalks&#39;s Blog - Bywalks个人博客|网络安全爱好者</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Bywalks&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Bywalks&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">还在路上</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Bywalks</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">January 30, 2023&nbsp;&nbsp;0:00:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E9%9A%8F%E7%AC%94%E6%9D%82%E8%B0%88/">随笔杂谈</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><span style="color: #008000;">前言</span></h2><p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">新年很快就过去了，马上要迎来2023年的伊始，想想自己上篇随笔，已经过了四五年，新的一年，回顾下自己的过往，展望下未来以及今年的目标。</span></font></p>
+<h2 id="启蒙"><a href="#启蒙" class="headerlink" title="启蒙"></a><span style="color: #008000;">启蒙</span></h2><p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">想想启蒙的经历，也是挺有趣的，那时还在初中的时候，时代有点久远，聊聊印象比较深刻的几个回忆</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">回忆一：移动梦网刷钻，当时正是移动梦网刷QQ红钻、蓝钻正火的时候，由于好奇，便搜了搜一些黑客论坛，在一个黑客论坛发现了教程，便模仿着教程给自己的QQ账号刷了个满钻，这也是第一次利用技术给自己带来了便利；</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">回忆二：弱口令上网，这其实也很有趣，当时家庭网络都是通过拨号上网，我正处于放暑假的时期，我没什么事就喜欢去碰碰电脑打游戏，为了防沉迷老妈就把家里的网给停掉了，也就是用家里账号密码无法拨号上网，没办法上网那么就限制了很多，当时也是灵机一动，因为我们家的密码是123456，也就是现在所说的弱口令了，账号一般是136666这种纯数字，那么有没有办法用别人的账号去上网呢，尝试一下，用自己家的账号往上加，密码用123456，竟然真的可以登录别人的账号密码，那么就可以用别人的账号密码去上网了，当时父母回家，看我打游戏还以为是单机游戏，这个故事估计他们现在都不清楚；</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">回忆三：由于对黑客知识感兴趣，便进入了一个黑客论坛学习，当时的论坛负责人通过收徒和出售免杀灰鸽子盈利，有一个YY频道，我没事也就在YY频道呆着，某天晚上，有一个访客进入了这个YY频道，找当时的论坛负责人说要切磋一下，他们两个便进入了一个小频道，等出来的时候聊了些技术方便的东西，当时的我什么都不懂，只是觉得这两个人都很酷，我以后也要成为有这样技术的人，现在想来，这也就是为什么后续我会入行的原因；</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">高中是私立高中，也就没有了接触电脑的机会，之后再接触也是在大学的时候了。</span></font></p>
+<h2 id="入行"><a href="#入行" class="headerlink" title="入行"></a><span style="color: #008000;">入行</span></h2><p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">说到真正系统入行的时间大概是在大二下学期，当时的大一大二，每天就是参加不同的社团活动，跟朋友出去喝酒打麻将，某天突然觉得不能这样了，要为自己以后考虑个方向，便把所有社团的职务全部辞去，开始跟着视频自学渗透测试相关的知识，说起这段经历跟我高中好像一样，我的高中也是玩了两年，然后开始奋发学习的；</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">学习了相关的知识之后，便是应用，白帽这个概念当时正火，我也尝试挖挖漏洞，当时的第一个比较有成果的是58同城，58SRC刚开启的时候，花了四五天的时间去挖掘他们相应的资产，提交了11个漏洞，获得了月榜第八，季榜第九的成绩，当时的我非常喜悦，第一次通过自己的努力获得了相应的成果；</span></font></p>
+<p><img src="/2023/01/30/%E8%BF%98%E5%9C%A8%E8%B7%AF%E4%B8%8A/1.jpg"></p>
+<p><img src="/2023/01/30/%E8%BF%98%E5%9C%A8%E8%B7%AF%E4%B8%8A/2.jpg"></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">在后面，通过一些新闻知道了国外hackerone平台之后，就想试试自己是否也可以挖掘一些国外网站的漏洞，第一个有收获的平台是twitter，通过查看别人的报告和bypass尝试，挖到了twitter的两个漏洞，当时给我的漏洞赏金是1120刀+560刀，对于当时的我来说，是一笔不小的收入，拿着这笔收入，我去了北京，去看了第一届defcon china，那是我第一次去北京，还特意发了个朋友圈，也是我第一次参加这样的hacker议会；</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">twitter漏洞</span></font></p>
+<p><img src="/2023/01/30/%E8%BF%98%E5%9C%A8%E8%B7%AF%E4%B8%8A/3.jpg"></p>
+<p><img src="/2023/01/30/%E8%BF%98%E5%9C%A8%E8%B7%AF%E4%B8%8A/4.jpg"></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">北京</span></font></p>
+<p> <img src="/2023/01/30/%E8%BF%98%E5%9C%A8%E8%B7%AF%E4%B8%8A/5.png"></p>
+<h2 id="工作"><a href="#工作" class="headerlink" title="工作"></a><span style="color: #008000;">工作</span></h2><p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">时间转到2019年，到了该毕业的时候了，来到了绿盟，网安届的黄埔军校，说起来到绿盟也是缘分，当时由于大学在广东，便首选广深的公司，网安方向拿到了深信服的offer，跟父母沟通，老妈还是希望离家近一点，便拒了深信服的offer另谋他路。</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">绿盟从哪说起呢，从面试开始吧，我在绿盟第一个让我印象比较深刻的是曹嘉总，我跟他的交集在于他是我终面的面试官，在我到如今的经历中，他是唯二让我在面试过程中感到舒服加敬佩的面试官，后续得知他是在上海从安全工程师一步步走到如今的高层。</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">过了面试就是一段时间的休息了，直到入职培训，入职培训是在北京总部旁，在那遇到了一群身怀绝技的小伙伴，有会相声的、有跳舞跳得厉害的，那时候觉得原来同龄人都这么棒，我好像什么都不会。</span></font></p>
+<p><img src="/2023/01/30/%E8%BF%98%E5%9C%A8%E8%B7%AF%E4%B8%8A/6.jpg"></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">培训时光转眼就过去了，我就到了上海开始我的工作生涯，工作方面印象比较深的有三个故事</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">故事一：刚入职第一天的中午，我正坐在座位上的时候，我的直系领导就把我派到连云港，上海那时没有直达连云港的火车或者高铁，要在中途某站转乘，我在第一天下午出发，第二天凌晨两点到达，第二天7点起床的情况下，从连云港开始了我的绿盟生涯；</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">故事二：在工作了8-9个月的时候，上海新来了一个安服的领导，分走原安服领导一半的业务，我也被分在了他的手下，刚开始都不熟悉，某天他给我了一个项目，项目内容是对某公司的设备、资产进行安全巡检，某公司有多个区域办事处，约在四个省市，也就是说，我需要跟我司这四个省市的人去沟通协调设备人员资源去完成这个项目，项目完成的比较圆满，也就是这个项目，我跟这个新ld建立了互相的工作信任；</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">故事三：某次HW，带着几个同事加实习生，去客户现场进行安全值守，当时客户现场是12小时轮班制，夜班的同学比较辛苦，某天在我早晨起床准备去客户现场上班时，发现手机有电脑打来，是我ld打过来，跟我说我们昨晚值守的同学被客户的安全负责人抓到晚上在客户现场睡觉，我便急忙忙的去客户现场了解情况，并跟客户安全负责人进行情况沟通并道歉，客户方要求我们要对该人员进行跟换，便安抚原人员，协调另外一个人员进行更换，这件事怎么说呢，当时也是正好撞在了枪口上，当天他们疑似被人通过深信服的VPN漏洞攻破到了内部，作为安全负责人，对这件事直接负责，所以心情不太好，在后续的沟通中也获得了这个信息；</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">在绿盟上海，也有着两个比较敬佩+感谢的人，一就是桥哥，上海办事处工作十多年的技术大佬，大家都流传着有问题，找桥哥的民间口号，其也很和蔼，我初到上海的时候，项目遇到了很多问题，实在不知道怎么办就找桥哥，桥哥都会给我耐心解答，在我离开绿盟的时候，看桥哥桌上摆着几个玩具，便送了桥哥一个玩具作离别礼物；第二个想去说到的就是涛哥了，负责华东区域的区总，跟他有交集是因为篮球，他总会组一些篮球局，我也会去打打，慢慢的会一起聊聊天，发现我们都健身，彼此气质也相符，虽然他总说我屌丝，我也总臭他吹牛，拆他台，他挺欣赏我，甚至喝酒的时候总开玩笑要拉我去做销售，我也挺喜欢他这种风格的人，等我到了三十多岁可能就是他这样，慢慢的我们开始熟悉，他离开绿盟的时候送了他一个抱着篮球的玩具作礼物；</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">转眼，绿盟生涯就结束了，离开绿盟的原因很多，企业文化的变化、熟悉的人的离开、个人的职业发展、钱、工作太累，这些理由都有，其中核心的理由应该是个人的职业发展，由于当时要负责项目，个人精力的一半要分给项目管理，跟人的沟通上，没什么精力去搞技术，在完成与ld在十月份沟通，半年内不离开的承诺后，在四月份HW前便提了离职，值得一提的是，四月份本是加薪的时候，我本应的加薪幅度也是top1&#x2F;2；</span></font></p>
+<h2 id="休息"><a href="#休息" class="headerlink" title="休息"></a><span style="color: #008000;">休息</span></h2><p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">离职后，本是准备去一家乙方去做安全研究，左思右想，综合平台、面试感觉、钱还是没有去，当时是在四月份，也正是在大HW期间，便去接了个上海的HW私活，当时给我介绍的还正是绿盟的同事，我的第二份工作也跟这个大HW的私活有关，由于在绿盟工作跟绿盟原来的人关系都比较好，离职后倒也不缺私活，便开始了边找工作、边接私活、边学习休息的时光，那时两个多月比得上在绿盟大半年的收入了；</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">找工作其实也是个很有趣的过程，我的前同事们给我推荐了一些工作机会，我面试的面试官有些也是氯离子；</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">断断续续的面试下，拿了奇安信、深信服、携程、拼多多的offer，pdd的面试要说到之前HW私活了，正是私活过程中出的一份溯源report，让pdd的面试官眼前一亮，拿到了pdd的offer，最终也去了pdd，去拼多多其实主要是因为面试感觉，我的直系领导是除了曹嘉总之外另一个让我感到十分舒服的面试官，后续，在与HR的沟通的过程中更是知道了他是当年HW第一名腾讯的带队人；</span></font></p>
+<h2 id="新的旅途"><a href="#新的旅途" class="headerlink" title="新的旅途"></a><span style="color: #008000;">新的旅途</span></h2><p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">在HR的催促下，入职拼多多，当时是中午，直系ld王导请我吃了个入职饭，便开始了拼多多的工作生涯，当天下午短暂的熟悉了两个小时，就开始了工作，值得一提的是我是直到他离职唯一一个入职这个团队的成员，初期的工作成果主要是一份有趣的report，出了一份拿下内网四万多台服务器的report，这份报告花了我们三周的时间，刚开始是因为某漏洞拿了某台服务器，通过该服务器进行横向，第一次横向了上百台服务器的权限，之后6K+台，上万台，直到最后的四万多台服务器权限，这份report的过程很累，也需要去肯定王导的帮助，不是他我可能在6K+台服务器权限就觉得可以了，也就没有那久违的兴奋感与成就感；</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">好景不长，某天王导因家庭原因要离职，在他在职的最后一天，请我去按了个摩，我们便结束了这段合作关系，与他的相处中，我发现他是个很务实的人，传导拿一份钱就需要把事做好的观点，这对我，也产生了一些影响；</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">在其走后的第二天，HR便跟我沟通，另一个安全团队需要个渗透的同学，我便加入了这个安全团队，之后刚好涛哥来了上海，我们便聚在一起喝了顿酒，我便跟他聊了这件事，他那对下面某个红队的队长不满意，便想拉我去管某几个省市的红队，这个事对于当时的我来说确实是个需要思考的问题，想了一段时间之后，我还是决定留下，原因有很多，他所在的地离我家较远，太早做管理也不太符合我的发展规划，再加上目前team的成员较nice，领导风格属于会给我较大的自由度，这种其实倒也是我挺喜欢的工作模式，便婉拒了，同时也留了一份感激在心里；</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">新团队属于有事做事，没事自己规划工作内容的风格，目前来看是那么三个阶段，阶段一熟悉资产，出渗透测试report，期间出过拿下全公司办公机器，越权查看全公司通知等报告，也算小有成果；阶段二梳理资产，落地渗透测试规范，流程，修复方案等；阶段三在原有工作内容的基础上，做些溯源，安全产品对抗（BAS）之类的工作；</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">工作之外，2022年放了两个项目给github，一个是K8S安全攻防思维导图K8s-Mind-Map，另外一个就是以hackerone和bugcrowd里的资产为目标的白帽漏洞挖掘扫描器DarkAngel；</span></font></p>
+<h2 id="展望"><a href="#展望" class="headerlink" title="展望"></a><span style="color: #008000;">展望</span></h2><p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">回想整个职业生涯，给互联网交过几百个漏洞，交过的厂商有腾讯、百度、小米、58、oppo、twitter、google、paypal等，写过一些文章给各个安全论坛，也算是给网络安全做过自己的一份贡献；</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">想想当下，生活好像陷入了停滞，新的一年，该给自己定一些有趣的目标并完成他们；</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">2023年的目标如下</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">1、参考国内外的BAS产品，完成一个不错的BAS产品；</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">2、持续优化DarkAngel项目，并让这个项目的stars到1K+；</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">3、去参加不同的议会，汲取不同人的安全观点，有机会做做自己的分享；</span></font></p>
+<p><font size="3"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">最后，努力让自己做个靠谱的人。</span></font></p>
+<p><img src="/2023/01/30/%E8%BF%98%E5%9C%A8%E8%B7%AF%E4%B8%8A/7.jpg"></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Bywalks</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://bywalks.com/2023/01/30/%E8%BF%98%E5%9C%A8%E8%B7%AF%E4%B8%8A/">http://bywalks.com/2023/01/30/%E8%BF%98%E5%9C%A8%E8%B7%AF%E4%B8%8A/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E9%9A%8F%E7%AC%94%E6%9D%82%E8%B0%88/"># 随笔杂谈</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2022/12/12/DarkAngel%20-%20%E5%85%A8%E8%87%AA%E5%8A%A8%E7%99%BD%E5%B8%BD%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%E5%99%A8/">DarkAngel - 全自动白帽漏洞扫描器</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Bywalks | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
